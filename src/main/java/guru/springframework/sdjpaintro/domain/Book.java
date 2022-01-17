@@ -9,7 +9,8 @@ import javax.persistence.*;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // not recommended for production, UUIDs is preferable in out experience
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    // GenerationType.AUTO not recommended for production, UUIDs is preferable in our experience
     // this will be null before the entity is saved
     private Long id;
 
