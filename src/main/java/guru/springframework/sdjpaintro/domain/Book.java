@@ -14,6 +14,8 @@ public class Book {
     // this will be null before the entity is saved
     private Long id;
 
+    private Long authorId;
+
     private String title;
     private String isbn;
     private String publisher;
@@ -22,7 +24,8 @@ public class Book {
     public Book() {
     }
 
-    public Book(String title, String isbn, String publisher) {
+    public Book(Long authorId, String title, String isbn, String publisher) {
+        this.authorId = authorId;
         this.title = title;
         this.isbn = isbn;
         this.publisher = publisher;
@@ -34,6 +37,14 @@ public class Book {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 
     public String getTitle() {
@@ -77,6 +88,7 @@ public class Book {
     public String toString() {
         return new StringJoiner(", ", Book.class.getSimpleName() + "[", "]")
             .add("id=" + id)
+            .add("authorId=" + authorId)
             .add("title='" + title + "'")
             .add("isbn='" + isbn + "'")
             .add("publisher='" + publisher + "'")

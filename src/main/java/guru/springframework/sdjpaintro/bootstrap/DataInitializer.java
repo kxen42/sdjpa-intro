@@ -17,13 +17,13 @@ public class DataInitializer implements CommandLineRunner {
         this.bookRepository = bookRepository;
     }
 
-    @SuppressWarnings("java:S106") //this runs on command line - we don't need logging lib
+    @SuppressWarnings("java:S106") // just blow off the warnings about System.out DON'T DO THIS IN PROD
     @Override
     public void run(String... args) throws Exception {
 
         bookRepository.deleteAll();
 
-        Book bookDDD = new Book("Domain Driven Design", "123", "RandomHouse");
+        Book bookDDD = new Book(null, "Domain Driven Design", "123", "RandomHouse");
 
         System.out.println("DataInitializer Id: " + bookDDD.getId());
 
@@ -31,7 +31,7 @@ public class DataInitializer implements CommandLineRunner {
 
         System.out.println("DataInitializer Id: " + savedDDD.getId());
 
-        Book bookSIA = new Book("Spring In Action", "234234", "OReilly");
+        Book bookSIA = new Book(null, "Spring In Action", "234234", "OReilly");
         Book savedSIA = bookRepository.save(bookSIA);
 
         System.out.println("DataInitializer");
