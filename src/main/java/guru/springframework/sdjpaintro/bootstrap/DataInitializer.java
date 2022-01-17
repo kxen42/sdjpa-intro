@@ -1,11 +1,13 @@
 package guru.springframework.sdjpaintro.bootstrap;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import guru.springframework.sdjpaintro.domain.Book;
 import guru.springframework.sdjpaintro.repositories.BookRepository;
 
+@Profile({"local", "default"})
 @Component
 public class DataInitializer implements CommandLineRunner {
 
@@ -18,13 +20,16 @@ public class DataInitializer implements CommandLineRunner {
     @SuppressWarnings("java:S106") //this runs on command line - we don't need logging lib
     @Override
     public void run(String... args) throws Exception {
+
+        bookRepository.deleteAll();
+
         Book bookDDD = new Book("Domain Driven Design", "123", "RandomHouse");
 
-        System.out.println("DataInitializer Id: " + bookDDD.getId() );
+        System.out.println("DataInitializer Id: " + bookDDD.getId());
 
         Book savedDDD = bookRepository.save(bookDDD);
 
-        System.out.println("DataInitializer Id: " + savedDDD.getId() );
+        System.out.println("DataInitializer Id: " + savedDDD.getId());
 
         Book bookSIA = new Book("Spring In Action", "234234", "OReilly");
         Book savedSIA = bookRepository.save(bookSIA);
