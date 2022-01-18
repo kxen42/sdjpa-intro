@@ -9,9 +9,12 @@ import javax.persistence.*;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // not recommended for production, UUIDs is preferable in out experience
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    // GenerationType.AUTO not recommended for production, UUIDs is preferable in our experience
     // this will be null before the entity is saved
     private Long id;
+
+    private Long authorId;
 
     private String title;
     private String isbn;
@@ -21,7 +24,8 @@ public class Book {
     public Book() {
     }
 
-    public Book(String title, String isbn, String publisher) {
+    public Book(Long authorId, String title, String isbn, String publisher) {
+        this.authorId = authorId;
         this.title = title;
         this.isbn = isbn;
         this.publisher = publisher;
@@ -33,6 +37,14 @@ public class Book {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 
     public String getTitle() {
