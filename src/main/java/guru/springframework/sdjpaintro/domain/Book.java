@@ -9,8 +9,8 @@ import javax.persistence.*;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    // GenerationType.AUTO not recommended for production, UUIDs is preferable in our experience
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // Be more specific than AUTO, Hibernate is picking TABLE with AUTO
     // this will be null before the entity is saved
     private Long id;
 
