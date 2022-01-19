@@ -1,7 +1,9 @@
-create table author
+DROP TABLE IF EXISTS author;
+
+CREATE TABLE author
 (
-    id        bigint not null,
-    first_name      varchar(50),
-    last_name varchar(50),
-    primary key (id)
-) engine = InnoDB;
+    id         BIGINT NOT NULL,
+    first_name VARCHAR(50),
+    last_name  VARCHAR(50),
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;

@@ -1,16 +1,19 @@
-drop table if exists book;
-drop table if exists hibernate_sequence;
+DROP TABLE IF EXISTS book;
+DROP TABLE IF EXISTS hibernate_sequence;
 
-create table book (
-                      id bigint not null,
-                      isbn varchar(255),
-                      publisher varchar(255),
-                      title varchar(255),
-                      primary key (id)
-) engine=InnoDB;
+CREATE TABLE book
+(
+    id        BIGINT not null,
+    isbn      VARCHAR(255),
+    publisher VARCHAR(255),
+    title     VARCHAR(255),
+    PRIMARY KEY (id)
+) ENGINE = InnoDB;
 
-create table hibernate_sequence (
-    next_val bigint
-) engine=InnoDB;
+CREATE TABLE hibernate_sequence
+(
+    next_val BIGINT
+) ENGINE = InnoDB;
 
-insert into hibernate_sequence values ( 1 );
+INSERT INTO hibernate_sequence
+VALUES (1);
