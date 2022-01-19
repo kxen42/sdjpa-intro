@@ -12,6 +12,9 @@ import org.springframework.test.context.ActiveProfiles;
 import guru.springframework.sdjpaintro.domain.AuthorUuid;
 import guru.springframework.sdjpaintro.domain.BookNatural;
 import guru.springframework.sdjpaintro.domain.BookUuid;
+import guru.springframework.sdjpaintro.domain.composite.AuthorComposite;
+import guru.springframework.sdjpaintro.domain.composite.AuthorEmbedded;
+import guru.springframework.sdjpaintro.domain.composite.NameId;
 import guru.springframework.sdjpaintro.repositories.*;
 
 /**
@@ -31,6 +34,10 @@ public class MySQLIntegrationTest {
     BookUuidRepository bookUuidRepository;
     @Autowired
     BookNaturalRepository bookNaturalRepository;
+    @Autowired
+    AuthorCompositeRepository authorCompositeRepository;
+    @Autowired
+    AuthorEmbeddedRepository authorEmbeddedRepository;
 
     @Test
     void testMySQL() {
@@ -83,6 +90,33 @@ public class MySQLIntegrationTest {
         // YUCK! Updatable PK
         bn1.setTitle("Bunnicula");
         fetched = bookNaturalRepository.getById("Bunnicula");
+        assertThat(fetched).isNotNull();
+    }
+
+    @Test
+    void testAuthorComposite() {
+        NameId nameid = new NameId("Bugs", "Bunny");
+        AuthorComposite author = new AuthorComposite();
+        author.setFirstName(nameid.getFirstName());
+        author.setLastName(nameid.getLastName());
+        author.setTwitter("wascally wabbit");
+
+        AuthorComposite saved = authorCompositeRepository.save(author);
+        assertThat(saved).isNotNull();
+
+        AuthorComposite fetched = authorCompositeRepository.getById(nameid);
+        assertThat(fetched).isNotNull();
+    }
+
+    @Test
+    void testAuthorEmbedded() {
+        NameId nameid = new NameId("Bugs", "Bunny");
+        AuthorEmbedded author = new AuthorEmbedded(nameid);
+
+        AuthorEmbedded saved = authorEmbeddedRepository.save(author);
+        assertThat(saved).isNotNull();
+
+        AuthorEmbedded fetched = authorEmbeddedRepository.getById(nameid);
         assertThat(fetched).isNotNull();
     }
 }
