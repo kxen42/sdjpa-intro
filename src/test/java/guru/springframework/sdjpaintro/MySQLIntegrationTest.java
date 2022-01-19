@@ -10,10 +10,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
 import guru.springframework.sdjpaintro.domain.AuthorUuid;
+import guru.springframework.sdjpaintro.domain.BookNatural;
 import guru.springframework.sdjpaintro.domain.BookUuid;
-import guru.springframework.sdjpaintro.repositories.AuthorUuidRepository;
-import guru.springframework.sdjpaintro.repositories.BookRepository;
-import guru.springframework.sdjpaintro.repositories.BookUuidRepository;
+import guru.springframework.sdjpaintro.repositories.*;
 
 /**
  * Created by jt on 7/4/21.
@@ -30,6 +29,8 @@ public class MySQLIntegrationTest {
     AuthorUuidRepository authorUuidRepository;
     @Autowired
     BookUuidRepository bookUuidRepository;
+    @Autowired
+    BookNaturalRepository bookNaturalRepository;
 
     @Test
     void testMySQL() {
@@ -59,6 +60,29 @@ public class MySQLIntegrationTest {
 
         // prove persistence
         BookUuid fetched = bookUuidRepository.getById(savedBu.getId());
+        assertThat(fetched).isNotNull();
+    }
+
+    @Test
+    void testBookNatural() {
+        // will fail
+        // org.springframework.orm.jpa.JpaSystemException: ids for this class must be manually assigned before calling
+        // save(): guru.springframework.sdjpaintro.domain.BookNatural; nested exception is
+        // org.hibernate.id.IdentifierGenerationException: ids for this class must be manually assigned before calling
+        // save(): guru.springframework.sdjpaintro.domain.BookNatural
+        // BookNatural saved = bookNaturalRepository.save(new BookNatural());
+        BookNatural bn1 = new BookNatural();
+        bn1.setTitle("The Silmarillion");
+        BookNatural saved = bookNaturalRepository.save(bn1);
+        assertThat(saved).isNotNull();
+        assertThat(saved.getTitle()).isNotNull();
+
+        BookNatural fetched = bookNaturalRepository.getById("The Silmarillion");
+        assertThat(fetched).isNotNull();
+
+        // YUCK! Updatable PK
+        bn1.setTitle("Bunnicula");
+        fetched = bookNaturalRepository.getById("Bunnicula");
         assertThat(fetched).isNotNull();
     }
 }
