@@ -34,12 +34,7 @@ public class AuthorJdbcDaoImpl implements AuthorJdbcDao {
             resultSet = ps.executeQuery();
 
             if (resultSet.next()) {
-                AuthorJdbc author = new AuthorJdbc();
-                author.setId(id);
-                author.setFirstName(resultSet.getString("first_name"));
-                author.setLastName(resultSet.getString("last_name"));
-
-                return author;
+                return getAuthorJdbcFromRS(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,17 +70,22 @@ public class AuthorJdbcDaoImpl implements AuthorJdbcDao {
             ps.setString(2, lastName);
             try (ResultSet resultSet = ps.executeQuery()) {
                 if (resultSet.next()) {
-                    AuthorJdbc author = new AuthorJdbc();
-                    author.setId(resultSet.getLong("id"));
-                    author.setFirstName(resultSet.getString("first_name"));
-                    author.setLastName(resultSet.getString("last_name"));
-
-                    return author;
+                    return getAuthorJdbcFromRS(resultSet);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    // use this for code commonality & DRY
+    private AuthorJdbc getAuthorJdbcFromRS(ResultSet resultSet) throws SQLException {
+        AuthorJdbc author = new AuthorJdbc();
+        author.setId(resultSet.getLong("id"));
+        author.setFirstName(resultSet.getString("first_name"));
+        author.setLastName(resultSet.getString("last_name"));
+
+        return author;
     }
 }
