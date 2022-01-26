@@ -1,4 +1,4 @@
-package guru.springframework.sdjpaintro;
+package guru.springframework.sdjpaintro.jpa;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -9,13 +9,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
-import guru.springframework.sdjpaintro.domain.AuthorUuid;
-import guru.springframework.sdjpaintro.domain.BookNatural;
-import guru.springframework.sdjpaintro.domain.BookUuid;
-import guru.springframework.sdjpaintro.domain.composite.AuthorComposite;
-import guru.springframework.sdjpaintro.domain.composite.AuthorEmbedded;
-import guru.springframework.sdjpaintro.domain.composite.NameId;
-import guru.springframework.sdjpaintro.repositories.*;
+import guru.springframework.sdjpaintro.jpa.domain.AuthorUuid;
+import guru.springframework.sdjpaintro.jpa.domain.BookNatural;
+import guru.springframework.sdjpaintro.jpa.domain.BookUuid;
+import guru.springframework.sdjpaintro.jpa.domain.composite.AuthorComposite;
+import guru.springframework.sdjpaintro.jpa.domain.composite.AuthorEmbedded;
+import guru.springframework.sdjpaintro.jpa.domain.composite.NameId;
+import guru.springframework.sdjpaintro.jpa.repository.*;
 
 /**
  * Created by jt on 7/4/21.
@@ -74,9 +74,9 @@ public class MySQLIntegrationTest {
     void testBookNatural() {
         // will fail
         // org.springframework.orm.jpa.JpaSystemException: ids for this class must be manually assigned before calling
-        // save(): guru.springframework.sdjpaintro.domain.BookNatural; nested exception is
+        // save(): BookNatural; nested exception is
         // org.hibernate.id.IdentifierGenerationException: ids for this class must be manually assigned before calling
-        // save(): guru.springframework.sdjpaintro.domain.BookNatural
+        // save(): BookNatural
         // BookNatural saved = bookNaturalRepository.save(new BookNatural());
         BookNatural bn1 = new BookNatural();
         bn1.setTitle("The Silmarillion");

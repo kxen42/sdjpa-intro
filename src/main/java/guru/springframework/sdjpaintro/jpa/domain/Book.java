@@ -1,44 +1,50 @@
-/**
- * BookUuid
- * Copyright (c) 2022, FastBridge Learning LLC
- * Created on January 18, 2022
- */
-package guru.springframework.sdjpaintro.domain;
+package guru.springframework.sdjpaintro.jpa.domain;
 
 import java.util.Objects;
 import java.util.StringJoiner;
-import java.util.UUID;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.GenericGenerator;
-
-/**
- * Demo UUID REF 4122 PK
- */
 @Entity
-public class BookUuid {
+public class Book {
 
-    // this will be null before the entity is saved
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "varbinary(16)", updatable = false, nullable = false)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // Be more specific than AUTO, Hibernate is picking TABLE with AUTO
+    // this will be null before the entity is saved
+    private Long id;
+
+    private Long authorId;
 
     private String title;
     private String isbn;
     private String publisher;
 
-    public BookUuid() {
+    // required by Hibernate
+    public Book() {
     }
 
-    public UUID getId() {
+    public Book(Long authorId, String title, String isbn, String publisher) {
+        this.authorId = authorId;
+        this.title = title;
+        this.isbn = isbn;
+        this.publisher = publisher;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 
     public String getTitle() {
@@ -69,8 +75,8 @@ public class BookUuid {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BookUuid that = (BookUuid) o;
-        return Objects.equals(id, that.id);
+        Book book = (Book) o;
+        return Objects.equals(id, book.id);
     }
 
     @Override
@@ -80,7 +86,7 @@ public class BookUuid {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", BookUuid.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", Book.class.getSimpleName() + "[", "]")
             .add("id=" + id)
             .add("title='" + title + "'")
             .add("isbn='" + isbn + "'")
@@ -88,4 +94,3 @@ public class BookUuid {
             .toString();
     }
 }
-

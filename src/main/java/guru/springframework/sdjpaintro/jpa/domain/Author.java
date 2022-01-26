@@ -1,25 +1,37 @@
-package guru.springframework.sdjpaintro.domain.composite;
+package guru.springframework.sdjpaintro.jpa.domain;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 
-/**
- * Holds that good old composite key
- */
-@Embeddable // only needed when using @EmbeddedId
-public class NameId implements Serializable {
+@Entity
+public class Author {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // Be more specific than AUTO, Hibernate is picking TABLE with AUTO
+    // this will be null before the entity is saved
+    private Long id;
+
     private String firstName;
+
     private String lastName;
 
-    public NameId() {
+    public Author() {
     }
 
-    public NameId(String firstName, String lastName) {
+    public Author(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -42,18 +54,19 @@ public class NameId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        NameId nameId = (NameId) o;
-        return Objects.equals(firstName, nameId.firstName) && Objects.equals(lastName, nameId.lastName);
+        Author author = (Author) o;
+        return Objects.equals(id, author.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", NameId.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", Author.class.getSimpleName() + "[", "]")
+            .add("id=" + id)
             .add("firstName='" + firstName + "'")
             .add("lastName='" + lastName + "'")
             .toString();

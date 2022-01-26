@@ -1,6 +1,5 @@
-package guru.springframework.sdjpaintro.domain.composite;
+package guru.springframework.sdjpaintro.jpa.domain.composite;
 
-import java.util.Objects;
 import java.util.StringJoiner;
 
 import javax.persistence.Entity;

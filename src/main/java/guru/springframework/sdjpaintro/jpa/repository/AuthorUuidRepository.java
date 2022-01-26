@@ -1,10 +1,10 @@
-package guru.springframework.sdjpaintro.repositories;
+package guru.springframework.sdjpaintro.jpa.repository;
 
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import guru.springframework.sdjpaintro.domain.AuthorUuid;
+import guru.springframework.sdjpaintro.jpa.domain.AuthorUuid;
 
 /**
  * Demonstrate using a varchar for a UUID PK

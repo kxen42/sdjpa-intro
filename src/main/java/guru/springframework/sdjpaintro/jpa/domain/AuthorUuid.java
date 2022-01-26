@@ -1,36 +1,39 @@
-package guru.springframework.sdjpaintro.domain;
+package guru.springframework.sdjpaintro.jpa.domain;
 
 import java.util.Objects;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 import javax.persistence.*;
 
-@Entity
-public class Author {
+import org.hibernate.annotations.Type;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // Be more specific than AUTO, Hibernate is picking TABLE with AUTO
+/**
+ * Demonstrate using a varchar for a UUID PK
+ */
+@Entity
+public class AuthorUuid {
+
     // this will be null before the entity is saved
-    private Long id;
+    // Using AUTO for convenience
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @Column(length=36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
+    private UUID id;
 
     private String firstName;
 
     private String lastName;
 
-    public Author() {
+    public AuthorUuid() {
     }
 
-    public Author(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -54,8 +57,8 @@ public class Author {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Author author = (Author) o;
-        return Objects.equals(id, author.id);
+        AuthorUuid that = (AuthorUuid) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
@@ -65,8 +68,8 @@ public class Author {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", Author.class.getSimpleName() + "[", "]")
-            .add("id=" + id)
+        return new StringJoiner(", ", AuthorUuid.class.getSimpleName() + "[", "]")
+            .add("id='" + id + "'")
             .add("firstName='" + firstName + "'")
             .add("lastName='" + lastName + "'")
             .toString();

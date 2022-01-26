@@ -1,7 +1,7 @@
-package guru.springframework.sdjpaintro;
+package guru.springframework.sdjpaintro.jpa;
 
-import guru.springframework.sdjpaintro.domain.Book;
-import guru.springframework.sdjpaintro.repositories.BookRepository;
+import guru.springframework.sdjpaintro.jpa.domain.Book;
+import guru.springframework.sdjpaintro.jpa.repository.BookRepository;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
