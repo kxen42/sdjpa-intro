@@ -3,7 +3,7 @@
  * Copyright (c) 2022, FastBridge Learning LLC
  * Created on January 18, 2022
  */
-package guru.springframework.sdjpaintro.jpa.domain;
+package guru.springframework.sdjpaintro.introduction.domain;
 
 import java.util.Objects;
 import java.util.StringJoiner;

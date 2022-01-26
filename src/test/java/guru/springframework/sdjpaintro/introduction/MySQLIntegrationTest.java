@@ -1,4 +1,4 @@
-package guru.springframework.sdjpaintro.jpa;
+package guru.springframework.sdjpaintro.introduction;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -9,13 +9,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
-import guru.springframework.sdjpaintro.jpa.domain.AuthorUuid;
-import guru.springframework.sdjpaintro.jpa.domain.BookNatural;
-import guru.springframework.sdjpaintro.jpa.domain.BookUuid;
-import guru.springframework.sdjpaintro.jpa.domain.composite.AuthorComposite;
-import guru.springframework.sdjpaintro.jpa.domain.composite.AuthorEmbedded;
-import guru.springframework.sdjpaintro.jpa.domain.composite.NameId;
-import guru.springframework.sdjpaintro.jpa.repository.*;
+import guru.springframework.sdjpaintro.introduction.domain.AuthorUuid;
+import guru.springframework.sdjpaintro.introduction.domain.BookNatural;
+import guru.springframework.sdjpaintro.introduction.domain.BookUuid;
+import guru.springframework.sdjpaintro.introduction.domain.composite.AuthorComposite;
+import guru.springframework.sdjpaintro.introduction.domain.composite.AuthorEmbedded;
+import guru.springframework.sdjpaintro.introduction.domain.composite.NameId;
+import guru.springframework.sdjpaintro.introduction.repository.*;
+
 
 /**
  * Created by jt on 7/4/21.

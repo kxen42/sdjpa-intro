@@ -130,7 +130,7 @@ class AuthorHibernateDaoImplTest {
         AuthorHibernate saved = authorDao.saveNewAuthor(author);
 
         assertThat(saved).isNotNull();
-        assertThat(saved.getId()).isNotNull());
+        assertThat(saved.getId()).isNotNull();
         System.out.println(author);
     }
 

@@ -1,18 +1,16 @@
-package guru.springframework.sdjpaintro.jpa;
+package guru.springframework.sdjpaintro.introduction;
 
-import guru.springframework.sdjpaintro.jpa.domain.Book;
-import guru.springframework.sdjpaintro.jpa.repository.BookRepository;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.Commit;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import guru.springframework.sdjpaintro.introduction.domain.Book;
+import guru.springframework.sdjpaintro.introduction.repository.BookRepository;
 
 /**
  * Created by jt on 7/3/21.

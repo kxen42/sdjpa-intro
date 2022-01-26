@@ -4,12 +4,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import guru.springframework.sdjpaintro.jpa.domain.AuthorUuid;
-import guru.springframework.sdjpaintro.jpa.domain.Book;
-import guru.springframework.sdjpaintro.jpa.domain.BookUuid;
-import guru.springframework.sdjpaintro.jpa.repository.AuthorUuidRepository;
-import guru.springframework.sdjpaintro.jpa.repository.BookRepository;
-import guru.springframework.sdjpaintro.jpa.repository.BookUuidRepository;
+import guru.springframework.sdjpaintro.introduction.domain.AuthorUuid;
+import guru.springframework.sdjpaintro.introduction.domain.Book;
+import guru.springframework.sdjpaintro.introduction.domain.BookUuid;
+import guru.springframework.sdjpaintro.introduction.repository.AuthorUuidRepository;
+import guru.springframework.sdjpaintro.introduction.repository.BookRepository;
+import guru.springframework.sdjpaintro.introduction.repository.BookUuidRepository;
+
 
 @Profile({"local", "default"})
 @Component

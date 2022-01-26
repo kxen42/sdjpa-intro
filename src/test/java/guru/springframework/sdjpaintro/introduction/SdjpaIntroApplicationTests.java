@@ -1,11 +1,13 @@
-package guru.springframework.sdjpaintro.jpa;
+package guru.springframework.sdjpaintro.introduction;
 
-import guru.springframework.sdjpaintro.jpa.repository.BookRepository;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import guru.springframework.sdjpaintro.introduction.repository.BookRepository;
+
 
 @SpringBootTest
 class SdjpaIntroApplicationTests {

@@ -1,4 +1,4 @@
-package guru.springframework.sdjpaintro.jpa.domain.composite;
+package guru.springframework.sdjpaintro.introduction.domain.composite;
 
 import java.util.StringJoiner;
 
