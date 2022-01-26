@@ -29,13 +29,12 @@ public class AuthorJpaDaoImpl implements AuthorJpaDao {
 
     @Override
     public AuthorJpa findAuthorJpaByName(String firstName, String lastName) {
-
         return null;
     }
 
     @Override
     public AuthorJpa saveNewAuthorJpa(AuthorJpa author) {
-        return null;
+        return authorRepository.save(author);
     }
 
     @Override
@@ -45,6 +44,6 @@ public class AuthorJpaDaoImpl implements AuthorJpaDao {
 
     @Override
     public void deleteAuthorJpaById(Long id) {
-
+        authorRepository.deleteById(id);
     }
 }
