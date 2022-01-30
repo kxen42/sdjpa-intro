@@ -10,6 +10,8 @@ public interface AuthorJpaDao {
 
     AuthorJpa findAuthorJpaByName(String firstName, String lastName);
 
+  AuthorJpa optionalFindJpaByName(String lastName);
+
     AuthorJpa saveNewAuthorJpa(AuthorJpa author);
 
     AuthorJpa updateAuthorJpa(AuthorJpa author);
