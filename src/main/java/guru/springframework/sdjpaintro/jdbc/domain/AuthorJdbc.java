@@ -4,9 +4,11 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 /**
- * From https://github.com/springframeworkguru/sdjpa-jdbc/blob/author-prepared-statement/src/main/java/guru/springframework/jdbc/dao/AuthorDao.java
+ * From
+ * https://github.com/springframeworkguru/sdjpa-jdbc/blob/author-prepared-statement/src/main/java/guru/springframework/jdbc/dao/AuthorDao.java
  */
 public class AuthorJdbc {
+
     private Long id;
     private String firstName;
     private String lastName;
@@ -14,8 +16,7 @@ public class AuthorJdbc {
     public AuthorJdbc() {
     }
 
-    public AuthorJdbc(Long id, String firstName, String lastName) {
-        this.id = id;
+  public AuthorJdbc(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
