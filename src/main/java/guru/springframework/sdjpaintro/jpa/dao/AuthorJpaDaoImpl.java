@@ -1,4 +1,3 @@
-/** AuthorJpaDaoImpl Copyright (c) 2022, FastBridge Learning LLC Created on January 25, 2022 */
 package guru.springframework.sdjpaintro.jpa.dao;
 
 import javax.persistence.EntityNotFoundException;

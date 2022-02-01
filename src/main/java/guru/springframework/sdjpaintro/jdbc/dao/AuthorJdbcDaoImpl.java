@@ -45,11 +45,19 @@ public class AuthorJdbcDaoImpl implements AuthorJdbcDao {
 
     } catch (SQLException e) {
       e.printStackTrace();
+            e.printStackTrace();
     }
 
     return found;
   }
 
+  /**
+   * Using John Thompson's solution
+   *
+   * @param firstName
+   * @param lastName
+   * @return found AuthorJdbc POJO
+   */
   @Override
   public AuthorJdbc findAuthorJdbcByName(String firstName, String lastName) {
 
@@ -62,21 +70,22 @@ public class AuthorJdbcDaoImpl implements AuthorJdbcDao {
 
       ps.setString(1, firstName);
       ps.setString(2, lastName);
-
-      // using Kousen's example for ResultSet handling
       ResultSet rs = ps.executeQuery();
+
       if (rs.next()) {
         found = getAuthorJdbcFromRS(rs); // work SOP
       }
       rs.close();
-
     } catch (SQLException e) {
       e.printStackTrace();
     }
     return found;
   }
 
-  // Using John Thompson's solution with try-with-resources
+  /**
+   * Using John Thompson's solution with my changes to use try-with-resources. The DB autogenerates
+   * the identity.
+   */
   @Override
   public AuthorJdbc saveNewAuthorJdbc(AuthorJdbc author) {
 
@@ -84,7 +93,7 @@ public class AuthorJdbcDaoImpl implements AuthorJdbcDao {
     try (Connection connection = source.getConnection();
         PreparedStatement ps =
             connection.prepareStatement(
-                "INSERT INTO  author_jdbc (first_name, last_name) VALUES (?, ?)")) {
+                "INSERT INTO  author_jdbc (first_name, last_name) VALUES (?, ?)"); ) {
 
       // relies on table DDL to auto_increment id
       ps.setString(1, author.getFirstName());
@@ -92,16 +101,51 @@ public class AuthorJdbcDaoImpl implements AuthorJdbcDao {
       ps.execute();
 
       // don't trust the ResultSet from running the insert
+      // Using MySql function LAST_INSERT_ID()
       Statement statement = connection.createStatement();
       ResultSet rs = statement.executeQuery("SELECT LAST_INSERT_ID()");
       if (rs.next()) {
         Long savedId = rs.getLong(1);
         saved = this.getById(savedId); // work SOP
       }
+      statement.close(); // Kousen and Thompson leaves it like this, it is not in its own try-block
     } catch (SQLException ex) {
       ex.printStackTrace();
     }
     return saved;
+  }
+
+  /**
+   * Ken Kousen's solution *
+   * https://github.com/kousen/Advanced_Java/blob/master/src/main/java/database/jdbc/JdbcPersonDAO.java
+   *
+   * @param author
+   * @return last generated PK
+   */
+  @Override
+  public Integer saveNewAuthorJdbcKousen(AuthorJdbc author) {
+    int generatedKey = 0;
+
+    try (Connection connection = source.getConnection();
+        PreparedStatement ps =
+            connection.prepareStatement(
+                "INSERT INTO  author_jdbc (first_name, last_name) VALUES (?, ?)",
+                Statement.RETURN_GENERATED_KEYS); ) {
+
+      ps.setString(1, author.getFirstName());
+      ps.setString(2, author.getLastName());
+
+      int uc = ps.executeUpdate();
+      if (uc != 1) throw new SQLException("No rows saved");
+
+      try (ResultSet keys = ps.getGeneratedKeys()) {
+        if (keys.next()) generatedKey = keys.getInt(1);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
+    return generatedKey;
   }
 
   @Override

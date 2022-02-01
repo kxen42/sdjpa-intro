@@ -11,6 +11,10 @@ import org.springframework.test.context.ActiveProfiles;
 
 import guru.springframework.sdjpaintro.jdbc.domain.AuthorJdbc;
 
+/**
+ * NOTE: This is not rolling back the tests. With a straight JDBC connection, you have to manage
+ * transactions. JDBC doesn't run in the Sp Tx context unlike JdbcTemplate or Sp. Data JPA.
+ */
 @ActiveProfiles("local")
 @DataJpaTest
 @ComponentScan(basePackages = {"guru.springframework.sdjpaintro.jdbc.dao"})
@@ -41,7 +45,7 @@ class AuthorJdbcDaoTest {
 
   @Test
   void saveNewAuthorJdbc() {
-    AuthorJdbc author = new AuthorJdbc("Dr.", "Seuss");
+    AuthorJdbc author = new AuthorJdbc("Ken", "Kousen");
     AuthorJdbc saved = authorJdbcDao.saveNewAuthorJdbc(author);
 
     assertThat(saved).isNotNull();
