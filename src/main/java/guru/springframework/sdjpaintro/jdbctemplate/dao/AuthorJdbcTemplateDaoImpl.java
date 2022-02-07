@@ -54,7 +54,7 @@ public class AuthorJdbcTemplateDaoImpl implements AuthorJdbcTemplateDao {
   }
 
   @Override
-  public void deleteAuthorJdbcTemplateById(Long id) {
+  public void deleteAuthorById(Long id) {
     jdbcTemplate.update("DELETE FROM author_jdbctemplate WHERE  id = ?", id);
   }
 

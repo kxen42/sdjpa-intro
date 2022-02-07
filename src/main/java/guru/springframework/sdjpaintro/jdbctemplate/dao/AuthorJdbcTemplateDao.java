@@ -11,5 +11,5 @@ public interface AuthorJdbcTemplateDao {
 
   AuthorJdbcTemplate updateAuthor(AuthorJdbcTemplate author);
 
-  void deleteAuthorJdbcTemplateById(Long id);
+  void deleteAuthorById(Long id);
 }

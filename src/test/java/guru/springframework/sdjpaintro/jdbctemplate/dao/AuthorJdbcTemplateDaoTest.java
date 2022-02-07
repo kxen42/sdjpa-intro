@@ -11,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,7 +92,7 @@ class AuthorJdbcTemplateDaoTest {
     @Test
     void deleteAuthorJdbcTemplateById() {
         AuthorJdbcTemplate saved = authorDao.saveNewAuthor(gaiman);
-        authorDao.deleteAuthorJdbcTemplateById(saved.getId());
+      authorDao.deleteAuthorById(saved.getId());
       assertThrows(
           EmptyResultDataAccessException.class,
           () -> {
