@@ -14,8 +14,6 @@ public class BookJpa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long authorId;
-
     private String title;
     private String isbn;
     private String publisher;
@@ -24,8 +22,7 @@ public class BookJpa {
     public BookJpa() {
     }
 
-    public BookJpa(Long authorId, String title, String isbn, String publisher) {
-        this.authorId = authorId;
+    public BookJpa(String title, String isbn, String publisher) {
         this.title = title;
         this.isbn = isbn;
         this.publisher = publisher;
@@ -39,13 +36,6 @@ public class BookJpa {
         this.id = id;
     }
 
-    public Long getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
-    }
 
     public String getTitle() {
         return title;
@@ -88,7 +78,6 @@ public class BookJpa {
     public String toString() {
         return new StringJoiner(", ", BookJpa.class.getSimpleName() + "[", "]")
             .add("id=" + id)
-            .add("authorId=" + authorId)
             .add("title='" + title + "'")
             .add("isbn='" + isbn + "'")
             .add("publisher='" + publisher + "'")

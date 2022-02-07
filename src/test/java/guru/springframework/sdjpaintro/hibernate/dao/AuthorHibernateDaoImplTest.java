@@ -13,150 +13,149 @@ import org.springframework.test.context.ActiveProfiles;
 
 import guru.springframework.sdjpaintro.hibernate.domain.AuthorHibernate;
 
-
 @ActiveProfiles("local")
 @DataJpaTest
 @ComponentScan(basePackages = {"guru.springframework.sdjpaintro.hibernate.dao"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class AuthorHibernateDaoImplTest {
 
-    @Autowired
-    AuthorHibernateDao authorDao;
+  @Autowired AuthorHibernateDao authorDao;
 
-//    @Autowired
-//    BookDao bookDao;
-//
-//    @Test
-//    void testDeleteBook() {
-//        Book book = new Book();
-//        book.setIsbn("1234");
-//        book.setPublisher("Self");
-//        book.setTitle("my book");
-//        Book saved = bookDao.saveNewBook(book);
-//
-//        bookDao.deleteBookById(saved.getId());
-//
-//        Book deleted = bookDao.getById(saved.getId());
-//
-//        assertThat(deleted).isNull();
-//    }
-//
-//    @Test
-//    void updateBookTest() {
-//        Book book = new Book();
-//        book.setIsbn("1234");
-//        book.setPublisher("Self");
-//        book.setTitle("my book");
-//
-//        AuthorHibernate author = new AuthorHibernate();
-//        author.setId(3L);
-//
-//        book.setAuthor(author);
-//        Book saved = bookDao.saveNewBook(book);
-//
-//        saved.setTitle("New Book");
-//        bookDao.updateBook(saved);
-//
-//        Book fetched = bookDao.getById(saved.getId());
-//
-//        assertThat(fetched.getTitle()).isEqualTo("New Book");
-//    }
-//
-//    @Test
-//    void testSaveBook() {
-//        Book book = new Book();
-//        book.setIsbn("1234");
-//        book.setPublisher("Self");
-//        book.setTitle("my book");
-//
-//        AuthorHibernate author = new AuthorHibernate();
-//        author.setId(3L);
-//
-//        book.setAuthor(author);
-//        Book saved = bookDao.saveNewBook(book);
-//
-//        assertThat(saved).isNotNull();
-//    }
-//
-//    @Test
-//    void testGetBookByName() {
-//        Book book = bookDao.findBookByTitle("Clean Code");
-//
-//        assertThat(book).isNotNull();
-//    }
-//
-//    @Test
-//    void testGetBook() {
-//        Book book = bookDao.getById(3L);
-//
-//        assertThat(book.getId()).isNotNull();
-//    }
+  //    @Autowired
+  //    BookJpaDao bookDao;
+  //
+  //    @Test
+  //    void testDeleteBook() {
+  //        Book book = new Book();
+  //        book.setIsbn("1234");
+  //        book.setPublisher("Self");
+  //        book.setTitle("my book");
+  //        Book saved = bookDao.saveNewBook(book);
+  //
+  //        bookDao.deleteBookById(saved.getId());
+  //
+  //        Book deleted = bookDao.findById(saved.getId());
+  //
+  //        assertThat(deleted).isNull();
+  //    }
+  //
+  //    @Test
+  //    void updateBookTest() {
+  //        Book book = new Book();
+  //        book.setIsbn("1234");
+  //        book.setPublisher("Self");
+  //        book.setTitle("my book");
+  //
+  //        AuthorHibernate author = new AuthorHibernate();
+  //        author.setId(3L);
+  //
+  //        book.setAuthor(author);
+  //        Book saved = bookDao.saveNewBook(book);
+  //
+  //        saved.setTitle("New Book");
+  //        bookDao.updateBook(saved);
+  //
+  //        Book fetched = bookDao.findById(saved.getId());
+  //
+  //        assertThat(fetched.getTitle()).isEqualTo("New Book");
+  //    }
+  //
+  //    @Test
+  //    void testSaveBook() {
+  //        Book book = new Book();
+  //        book.setIsbn("1234");
+  //        book.setPublisher("Self");
+  //        book.setTitle("my book");
+  //
+  //        AuthorHibernate author = new AuthorHibernate();
+  //        author.setId(3L);
+  //
+  //        book.setAuthor(author);
+  //        Book saved = bookDao.saveNewBook(book);
+  //
+  //        assertThat(saved).isNotNull();
+  //    }
+  //
+  //    @Test
+  //    void testGetBookByName() {
+  //        Book book = bookDao.findBookByTitle("Clean Code");
+  //
+  //        assertThat(book).isNotNull();
+  //    }
+  //
+  //    @Test
+  //    void testGetBook() {
+  //        Book book = bookDao.findById(3L);
+  //
+  //        assertThat(book.getId()).isNotNull();
+  //    }
 
-    @Test
-    void testDeleteAuthor() {
-        AuthorHibernate author = new AuthorHibernate();
-        author.setFirstName("john");
-        author.setLastName("t");
+  @Test
+  void testDeleteAuthor() {
+    AuthorHibernate author = new AuthorHibernate();
+    author.setFirstName("john");
+    author.setLastName("t");
 
-        AuthorHibernate saved = authorDao.saveNewAuthor(author);
+    AuthorHibernate saved = authorDao.saveNewAuthor(author);
 
-        authorDao.deleteAuthorById(saved.getId());
+    authorDao.deleteAuthorById(saved.getId());
 
-        assertThrows(EmptyResultDataAccessException.class, () -> {
-            AuthorHibernate deleted = authorDao.getById(saved.getId());
+    assertThrows(
+        EmptyResultDataAccessException.class,
+        () -> {
+          AuthorHibernate deleted = authorDao.getById(saved.getId());
         });
+  }
 
-    }
+  @Test
+  void testUpdateAuthor() {
+    AuthorHibernate author = new AuthorHibernate();
+    author.setFirstName("john");
+    author.setLastName("t");
 
-    @Test
-    void testUpdateAuthor() {
-        AuthorHibernate author = new AuthorHibernate();
-        author.setFirstName("john");
-        author.setLastName("t");
+    AuthorHibernate saved = authorDao.saveNewAuthor(author);
 
-        AuthorHibernate saved = authorDao.saveNewAuthor(author);
+    saved.setLastName("Thompson");
+    AuthorHibernate updated = authorDao.updateAuthor(saved);
 
-        saved.setLastName("Thompson");
-        AuthorHibernate updated = authorDao.updateAuthor(saved);
+    assertThat(updated.getLastName()).isEqualTo("Thompson");
+  }
 
-        assertThat(updated.getLastName()).isEqualTo("Thompson");
-    }
+  @Test
+  void testSaveAuthor() {
+    AuthorHibernate author = new AuthorHibernate();
+    author.setFirstName("John");
+    author.setLastName("Thompson");
+    AuthorHibernate saved = authorDao.saveNewAuthor(author);
 
-    @Test
-    void testSaveAuthor() {
-        AuthorHibernate author = new AuthorHibernate();
-        author.setFirstName("John");
-        author.setLastName("Thompson");
-        AuthorHibernate saved = authorDao.saveNewAuthor(author);
+    assertThat(saved).isNotNull();
+    assertThat(saved.getId()).isNotNull();
+    System.out.println(author);
+  }
 
-        assertThat(saved).isNotNull();
-        assertThat(saved.getId()).isNotNull();
-        System.out.println(author);
-    }
+  @Test
+  void testAlternateSaveAuthor() {
+    AuthorHibernate author = new AuthorHibernate();
+    author.setFirstName("Mark");
+    author.setLastName("Twain");
+    AuthorHibernate saved = authorDao.alternateSaveNewAuthor(author);
 
-    @Test
-    void testAlternateSaveAuthor() {
-        AuthorHibernate author = new AuthorHibernate();
-        author.setFirstName("Mark");
-        author.setLastName("Twain");
-        AuthorHibernate saved = authorDao.alternateSaveNewAuthor(author);
+    assertThat(saved).isNotNull();
+    assertThat(saved.getId()).isNotNull();
+    System.out.println(author);
+  }
 
-        assertThat(saved).isNotNull();
-        assertThat(saved.getId()).isNotNull();
-        System.out.println(author);
-    }
+  @Test
+  void testGetAuthorByName() {
+    AuthorHibernate author = authorDao.findAuthorByName("Craig", "Walls");
 
-    @Test
-    void testGetAuthorByName() {
-        AuthorHibernate author = authorDao.findAuthorByName("Craig", "Walls");
+    assertThat(author).isNotNull();
+  }
 
-        assertThat(author).isNotNull();
-    }
+  @Test
+  void testGetAuthor() {
+    AuthorHibernate author = authorDao.getById(1L);
 
-    @Test
-    void testGetAuthor() {
-        AuthorHibernate author = authorDao.getById(1L);
-
-        assertThat(author).isNotNull();
-    }
+    assertThat(author).isNotNull();
+  }
 }
