@@ -32,6 +32,15 @@ public class AuthorJdbcTemplateDaoImpl implements AuthorJdbcTemplateDao {
   }
 
   @Override
+  public AuthorJdbcTemplate findAuthorBookById(Long id) {
+    String sql =
+        "SELECT author.id AS id, first_name, last_name, book.id AS book_id, book.isbn, book.publisher, book.title FROM author_jdbctemplate author\n"
+            + "LEFT OUTER JOIN book_jdbctemplate book ON author.id = book.author_id WHERE author.id = ?";
+
+    return jdbcTemplate.query(sql, new AuthorExtractor(), id);
+  }
+
+  @Override
   public AuthorJdbcTemplate saveNewAuthor(AuthorJdbcTemplate author) {
     jdbcTemplate.update(
         "INSERT INTO author_jdbctemplate (first_name, last_name) VALUES (?,?)",

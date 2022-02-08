@@ -7,6 +7,8 @@ public interface AuthorJdbcTemplateDao {
 
   AuthorJdbcTemplate findAuthorByName(String firstName, String lastName);
 
+  AuthorJdbcTemplate findAuthorBookById(Long id);
+
   AuthorJdbcTemplate saveNewAuthor(AuthorJdbcTemplate author);
 
   AuthorJdbcTemplate updateAuthor(AuthorJdbcTemplate author);

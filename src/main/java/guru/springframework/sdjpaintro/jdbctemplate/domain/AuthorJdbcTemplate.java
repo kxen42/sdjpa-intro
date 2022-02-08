@@ -16,8 +16,8 @@ public class AuthorJdbcTemplate {
     private String firstName;
     private String lastName;
 
-    @Transient
-    List<BookJdbcTemplate> books;
+  // tells Hibernate to ignore it for validation because we aren't using JPA or Hibernate
+  @Transient List<BookJdbcTemplate> books;
 
     public AuthorJdbcTemplate() {
     }

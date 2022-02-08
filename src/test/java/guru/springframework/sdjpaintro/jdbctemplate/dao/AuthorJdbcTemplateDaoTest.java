@@ -16,25 +16,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import guru.springframework.sdjpaintro.jdbctemplate.domain.AuthorJdbcTemplate;
 
-
 @ActiveProfiles("local")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ComponentScan(basePackages = {"guru.springframework.sdjpaintro.jdbctemplate.dao"})
 class AuthorJdbcTemplateDaoTest {
 
-    @Autowired
-    AuthorJdbcTemplateDao authorDao;
-
-    static final AuthorJdbcTemplate gaiman = new AuthorJdbcTemplate("Neil", "Gaiman", null);
+  static final AuthorJdbcTemplate gaiman = new AuthorJdbcTemplate("Neil", "Gaiman", null);
+  @Autowired AuthorJdbcTemplateDao authorDao;
 
   @Nested
   @DisplayName("Read Operations")
   class PrePrimed {
     @Test
     void getById() {
-        AuthorJdbcTemplate found = authorDao.getById(1L);
-        assertThat(found).isNotNull();
+      AuthorJdbcTemplate found = authorDao.getById(1L);
+      assertThat(found).isNotNull();
       System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx");
       System.out.println("PrePrimed.getById " + found);
       System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx");
@@ -42,24 +39,34 @@ class AuthorJdbcTemplateDaoTest {
 
     @Test
     void findAuthorByName() {
-        AuthorJdbcTemplate found = authorDao.findAuthorByName("Craig", "Walls");
+      AuthorJdbcTemplate found = authorDao.findAuthorByName("Craig", "Walls");
       assertThat(found).isNotNull();
       System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx");
       System.out.println("PrePrimed.findAuthorByName " + found);
       System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx");
     }
-}
+
+    @Test
+    void findAuthorBookById() {
+      AuthorJdbcTemplate found = authorDao.findAuthorBookById(1L);
+      assertThat(found).isNotNull();
+      System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx");
+      System.out.println("PrePrimed.findAuthorBookById " + found);
+      System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx");
+    }
+  }
 
   @Nested
   @DisplayName("Insert, Update, Delete")
-  // the Ids increase because the DB is using AUTO INCREMENT, when rollbacks occur ins the gaps can appear in the IDs
+  // the Ids increase because the DB is using AUTO INCREMENT, when rollbacks occur ins the gaps can
+  // appear in the IDs
   class DataMutation {
     @Test
     void saveNewAuthor() {
-        assertThat(gaiman.getId()).isNull();
-        AuthorJdbcTemplate saved = authorDao.saveNewAuthor(gaiman);
-        assertThat(saved).isNotNull();
-        assertThat(saved.getId()).isNotNull();
+      assertThat(gaiman.getId()).isNull();
+      AuthorJdbcTemplate saved = authorDao.saveNewAuthor(gaiman);
+      assertThat(saved).isNotNull();
+      assertThat(saved.getId()).isNotNull();
       System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx");
       System.out.println("Interdependent.saveNewAuthor " + saved);
       System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx");
@@ -91,7 +98,7 @@ class AuthorJdbcTemplateDaoTest {
 
     @Test
     void deleteAuthorJdbcTemplateById() {
-        AuthorJdbcTemplate saved = authorDao.saveNewAuthor(gaiman);
+      AuthorJdbcTemplate saved = authorDao.saveNewAuthor(gaiman);
       authorDao.deleteAuthorById(saved.getId());
       assertThrows(
           EmptyResultDataAccessException.class,
@@ -99,5 +106,5 @@ class AuthorJdbcTemplateDaoTest {
             authorDao.getById(gaiman.getId());
           });
     }
-    }
+  }
 }
