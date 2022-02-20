@@ -6,64 +6,62 @@ import java.util.StringJoiner;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-/**
- * Demo a natural primary key.
- * And a very bad one at that.
- */
+/** Demo a natural primary key. And a very bad one at that. */
 @Entity
 public class BookNatural {
 
-    @Id
-    // this will do nothing to prevent updates if you have a setter for title
-    // @Column(nullable = false, updatable = false)
-    private String title;
-    private String isbn;
-    private String publisher;
+  @Id
+  // this will do nothing to prevent updates if you have a setter for title
+  // @Column(nullable = false, updatable = false)
+  private String title;
 
-    public String getTitle() {
-        return title;
-    }
+  private String isbn;
+  private String publisher;
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public String getIsbn() {
-        return isbn;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
+  public String getIsbn() {
+    return isbn;
+  }
 
-    public String getPublisher() {
-        return publisher;
-    }
+  public void setIsbn(String isbn) {
+    this.isbn = isbn;
+  }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
+  public String getPublisher() {
+    return publisher;
+  }
 
-    // don't allow null title
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BookNatural that = (BookNatural) o;
-        return title.equals(that.title);
-    }
+  public void setPublisher(String publisher) {
+    this.publisher = publisher;
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(title);
-    }
+  // don't allow null title
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    BookNatural that = (BookNatural) o;
+    return title.equals(that.title);
+  }
 
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", BookNatural.class.getSimpleName() + "[", "]")
-            .add("title='" + title + "'")
-            .add("isbn='" + isbn + "'")
-            .add("publisher='" + publisher + "'")
-            .toString();
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(title);
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", BookNatural.class.getSimpleName() + "[", "]")
+        .add("title='" + title + "'")
+        .add("isbn='" + isbn + "'")
+        .add("publisher='" + publisher + "'")
+        .toString();
+  }
 }

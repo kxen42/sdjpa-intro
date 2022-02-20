@@ -8,89 +8,90 @@ import javax.persistence.*;
 @Entity
 public class Book {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // Be more specific than AUTO, Hibernate is picking TABLE with AUTO
-    // this will be null before the entity is saved
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  // Be more specific than AUTO, Hibernate is picking TABLE with AUTO
+  // this will be null before the entity is saved
+  private Long id;
 
-    private Long authorId;
+  private Long authorId;
 
-    private String title;
-    private String isbn;
-    private String publisher;
+  private String title;
+  private String isbn;
+  private String publisher;
 
-    // required by Hibernate
-    public Book() {
-    }
+  // required by Hibernate
+  public Book() {}
 
-    public Book(Long authorId, String title, String isbn, String publisher) {
-        this.authorId = authorId;
-        this.title = title;
-        this.isbn = isbn;
-        this.publisher = publisher;
-    }
+  public Book(Long authorId, String title, String isbn, String publisher) {
+    this.authorId = authorId;
+    this.title = title;
+    this.isbn = isbn;
+    this.publisher = publisher;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public Long getAuthorId() {
-        return authorId;
-    }
+  public Long getAuthorId() {
+    return authorId;
+  }
 
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
-    }
+  public void setAuthorId(Long authorId) {
+    this.authorId = authorId;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public String getIsbn() {
-        return isbn;
-    }
+  public String getIsbn() {
+    return isbn;
+  }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
+  public void setIsbn(String isbn) {
+    this.isbn = isbn;
+  }
 
-    public String getPublisher() {
-        return publisher;
-    }
+  public String getPublisher() {
+    return publisher;
+  }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
+  public void setPublisher(String publisher) {
+    this.publisher = publisher;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Book book = (Book) o;
-        return Objects.equals(id, book.id);
-    }
+  // Caution - this would be a disaster for JPA or Hibernate. See Hibernate docs or EverNote
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Book book = (Book) o;
+    return Objects.equals(id, book.id);
+  }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+  // Caution - this would be a disaster for JPA or Hibernate. See Hibernate docs or EverNote
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
 
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", Book.class.getSimpleName() + "[", "]")
-            .add("id=" + id)
-            .add("title='" + title + "'")
-            .add("isbn='" + isbn + "'")
-            .add("publisher='" + publisher + "'")
-            .toString();
-    }
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", Book.class.getSimpleName() + "[", "]")
+        .add("id=" + id)
+        .add("title='" + title + "'")
+        .add("isbn='" + isbn + "'")
+        .add("publisher='" + publisher + "'")
+        .toString();
+  }
 }

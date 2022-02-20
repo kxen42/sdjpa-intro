@@ -5,6 +5,8 @@ import java.util.StringJoiner;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.NaturalId;
+
 @Entity
 public class AuthorHibernate {
 
@@ -12,9 +14,8 @@ public class AuthorHibernate {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
-        private String firstName;
-
-        private String lastName;
+  @NaturalId private String firstName;
+  @NaturalId private String lastName;
 
         public AuthorHibernate() {
         }
@@ -48,8 +49,10 @@ public class AuthorHibernate {
             this.lastName = lastName;
         }
 
-    @Override
-    public boolean equals(Object o) {
+  /*
+  // Caution - this would be a disaster for JPA or Hibernate. See Hibernate docs or EverNote
+  @Override
+  public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthorHibernate that = (AuthorHibernate) o;
@@ -60,9 +63,23 @@ public class AuthorHibernate {
     public int hashCode() {
         return Objects.hash(id);
     }
+    */
 
-    @Override
-    public String toString() {
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    AuthorHibernate that = (AuthorHibernate) o;
+    return Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(firstName, lastName);
+  }
+
+  @Override
+  public String toString() {
         return new StringJoiner(", ", AuthorHibernate.class.getSimpleName() + "[", "]")
             .add("id=" + id)
             .add("firstName='" + firstName + "'")

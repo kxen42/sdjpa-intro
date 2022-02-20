@@ -1,4 +1,4 @@
-package guru.springframework.sdjpaintro.jdbctemplate.domain;
+package guru.springframework.sdjpaintro.hibernate.domain;
 
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -8,8 +8,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.NaturalId;
 
 @Entity
-@Table(name = "book_jdbctemplate")
-public class BookJdbcTemplate {
+public class BookHibernate {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,9 +19,9 @@ public class BookJdbcTemplate {
   private String publisher;
   private Long authorId;
 
-  public BookJdbcTemplate() {}
+  public BookHibernate() {}
 
-  public BookJdbcTemplate(String title, String isbn, String publisher) {
+  public BookHibernate(String title, String isbn, String publisher) {
     this.title = title;
     this.isbn = isbn;
     this.publisher = publisher;
@@ -72,25 +71,23 @@ public class BookJdbcTemplate {
   // Caution - this would be a disaster for JPA or Hibernate. See Hibernate docs or EverNote
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    BookJdbcTemplate that = (BookJdbcTemplate) o;
-    return Objects.equals(id, that.id);
-  }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BookHibernate that = (BookHibernate) o;
+        return Objects.equals(id, that.id);
+    }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
-  }
-  */
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+     */
 
-  // Use a natural business value instead of the ID if you leave it to Hibernate or the database to
-  // generate the ID
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    BookJdbcTemplate that = (BookJdbcTemplate) o;
+    BookHibernate that = (BookHibernate) o;
     return isbn.equals(that.isbn);
   }
 
@@ -101,7 +98,7 @@ public class BookJdbcTemplate {
 
   @Override
   public String toString() {
-    return new StringJoiner(", ", BookJdbcTemplate.class.getSimpleName() + "[", "]")
+    return new StringJoiner(", ", BookHibernate.class.getSimpleName() + "[", "]")
         .add("id=" + id)
         .add("title='" + title + "'")
         .add("isbn='" + isbn + "'")

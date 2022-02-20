@@ -5,53 +5,53 @@ import java.util.StringJoiner;
 
 import javax.persistence.*;
 
-/**
- * For the Spring Data JPA only examples.
- */
+import org.hibernate.annotations.NaturalId;
+
+/** For the Spring Data JPA only examples. */
 @Entity
 public class AuthorJpa {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String firstName;
+  @NaturalId private String firstName;
+  @NaturalId private String lastName;
 
-    private String lastName;
+  public AuthorJpa() {}
 
-    public AuthorJpa() {
-    }
+  public AuthorJpa(String firstName, String lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
 
-    public AuthorJpa(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public String getFirstName() {
+    return firstName;
+  }
 
-    public String getFirstName() {
-        return firstName;
-    }
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+  public String getLastName() {
+    return lastName;
+  }
 
-    public String getLastName() {
-        return lastName;
-    }
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    @Override
-    public boolean equals(Object o) {
+  /*
+  // Caution - this would be a disaster for JPA or Hibernate. See Hibernate docs or EverNote
+  @Override
+  public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthorJpa authorJpa = (AuthorJpa) o;
@@ -62,13 +62,28 @@ public class AuthorJpa {
     public int hashCode() {
         return Objects.hash(id);
     }
+     */
 
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", AuthorJpa.class.getSimpleName() + "[", "]")
-            .add("id=" + id)
-            .add("firstName='" + firstName + "'")
-            .add("lastName='" + lastName + "'")
-            .toString();
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    AuthorJpa authorJpa = (AuthorJpa) o;
+    return Objects.equals(firstName, authorJpa.firstName)
+        && Objects.equals(lastName, authorJpa.lastName);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(firstName, lastName);
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", AuthorJpa.class.getSimpleName() + "[", "]")
+        .add("id=" + id)
+        .add("firstName='" + firstName + "'")
+        .add("lastName='" + lastName + "'")
+        .toString();
+  }
 }

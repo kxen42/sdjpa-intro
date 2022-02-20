@@ -5,82 +5,96 @@ import java.util.StringJoiner;
 
 import javax.persistence.*;
 
-/**
- * For the Spring Data JPA only examples.
- */
+import org.hibernate.annotations.NaturalId;
+
+/** For the Spring Data JPA only examples. */
 @Entity
 public class BookJpa {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String title;
-    private String isbn;
-    private String publisher;
+  private String title;
+  @NaturalId private String isbn;
+  private String publisher;
 
-    // required by Hibernate
-    public BookJpa() {
-    }
+  // required by Hibernate
+  public BookJpa() {}
 
-    public BookJpa(String title, String isbn, String publisher) {
-        this.title = title;
-        this.isbn = isbn;
-        this.publisher = publisher;
-    }
+  public BookJpa(String title, String isbn, String publisher) {
+    this.title = title;
+    this.isbn = isbn;
+    this.publisher = publisher;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
+  public String getTitle() {
+    return title;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public String getIsbn() {
+    return isbn;
+  }
 
-    public String getIsbn() {
-        return isbn;
-    }
+  public void setIsbn(String isbn) {
+    this.isbn = isbn;
+  }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
+  public String getPublisher() {
+    return publisher;
+  }
 
-    public String getPublisher() {
-        return publisher;
-    }
+  public void setPublisher(String publisher) {
+    this.publisher = publisher;
+  }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
-
+  /*
+     // Caution - this would be a disaster for JPA or Hibernate. See Hibernate docs or EverNote
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BookJpa bookJpa = (BookJpa) o;
-        return Objects.equals(id, bookJpa.id);
-    }
+          if (this == o) return true;
+          if (o == null || getClass() != o.getClass()) return false;
+          BookJpa bookJpa = (BookJpa) o;
+          return Objects.equals(id, bookJpa.id);
+      }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+      @Override
+      public int hashCode() {
+          return Objects.hash(id);
+      }
+  */
 
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", BookJpa.class.getSimpleName() + "[", "]")
-            .add("id=" + id)
-            .add("title='" + title + "'")
-            .add("isbn='" + isbn + "'")
-            .add("publisher='" + publisher + "'")
-            .toString();
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    BookJpa bookJpa = (BookJpa) o;
+    return isbn.equals(bookJpa.isbn);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(isbn);
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", BookJpa.class.getSimpleName() + "[", "]")
+        .add("id=" + id)
+        .add("title='" + title + "'")
+        .add("isbn='" + isbn + "'")
+        .add("publisher='" + publisher + "'")
+        .toString();
+  }
 }

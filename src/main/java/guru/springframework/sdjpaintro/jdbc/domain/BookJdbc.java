@@ -60,6 +60,7 @@ public class BookJdbc {
     this.author = author;
   }
 
+  // Caution - this would be a disaster for JPA or Hibernate. See Hibernate docs or EverNote
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -68,6 +69,7 @@ public class BookJdbc {
     return Objects.equals(id, bookJdbc.id);
   }
 
+  // Caution - this would be a disaster for JPA or Hibernate. See Hibernate docs or EverNote
   @Override
   public int hashCode() {
     return Objects.hash(id);
