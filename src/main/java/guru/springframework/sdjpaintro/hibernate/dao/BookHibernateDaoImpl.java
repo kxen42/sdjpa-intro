@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 
 import guru.springframework.sdjpaintro.hibernate.domain.BookHibernate;
 
+/*
+Purposely using EntityManager and try-finally to close to do this old school
+ */
 @Component
 public class BookHibernateDaoImpl implements BookHibernateDao {
 
@@ -85,6 +88,28 @@ public class BookHibernateDaoImpl implements BookHibernateDao {
     em.remove(em.find(BookHibernate.class, id));
     em.getTransaction().commit();
     em.close();
+  }
+
+  @Override
+  public BookHibernate updatePrice(Long id, String price) {
+    // Try detach I saw in Baeldung
+    EntityManager em = getEntityManager();
+    try {
+      BookHibernate book = em.find(BookHibernate.class, id);
+      em.detach(book); // look what I can do!!!
+      book.setPrice(price);
+      em.getTransaction().begin();
+      BookHibernate updated = em.merge(book);
+      em.getTransaction().commit();
+      em.detach(updated);
+      return updated;
+    } catch (Exception e) {
+      // Yikes!!!
+      e.printStackTrace();
+    } finally {
+      em.close();
+    }
+    return null;
   }
 
   private EntityManager getEntityManager() {

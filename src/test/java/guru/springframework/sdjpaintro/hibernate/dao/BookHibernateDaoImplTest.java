@@ -113,5 +113,23 @@ class BookHibernateDaoImplTest {
       assertThat(checkUpdate.getAuthorId()).isOne();
       System.out.println("DataManipulation.updateBook checkUpdate: " + checkUpdate);
     }
+
+    @Test
+    void updatePrice() {
+      LocalTime junk = LocalTime.now();
+      BookHibernate book = new BookHibernate("Ada", junk.toString(), "McGraw Hill");
+      BookHibernate saved = bookDao.saveNewBook(book);
+      System.out.println("DataManipulation.updateBook saved: " + saved);
+
+      BookHibernate updated = bookDao.updatePrice(saved.getId(), "19.99");
+      // I want to see if the transition sticks
+      assertThat(updated.getPrice()).isEqualTo("19.99");
+
+      EntityManager em = emf.createEntityManager();
+      BookHibernate checkUpdate = em.find(BookHibernate.class, updated.getId());
+      em.close();
+      assertThat(updated.getPrice()).isEqualTo("19.99");
+      System.out.println("DataManipulation.updateBook checkUpdate: " + checkUpdate);
+    }
   }
 }

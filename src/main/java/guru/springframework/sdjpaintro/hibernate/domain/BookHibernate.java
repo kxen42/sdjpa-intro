@@ -18,6 +18,7 @@ public class BookHibernate {
   @NaturalId private String isbn;
   private String publisher;
   private Long authorId;
+  private String price;
 
   public BookHibernate() {}
 
@@ -67,6 +68,14 @@ public class BookHibernate {
     this.authorId = authorId;
   }
 
+  public String getPrice() {
+    return price;
+  }
+
+  public void setPrice(String price) {
+    this.price = price;
+  }
+
   /*
   // Caution - this would be a disaster for JPA or Hibernate. See Hibernate docs or EverNote
   @Override
@@ -104,6 +113,7 @@ public class BookHibernate {
         .add("isbn='" + isbn + "'")
         .add("publisher='" + publisher + "'")
         .add("authorId=" + authorId)
+        .add("price='" + price + "'")
         .toString();
   }
 }

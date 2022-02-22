@@ -17,4 +17,6 @@ public interface BookHibernateDao {
   void deleteBookById(Long id);
 
   List<BookHibernate> findAll();
+
+  BookHibernate updatePrice(Long id, String price);
 }
