@@ -41,6 +41,19 @@ public class BookHibernateDaoImpl implements BookHibernateDao {
     return book;
   }
 
+  @Override
+  public BookHibernate findByIsbn(String isbn) {
+    EntityManager em = getEntityManager();
+    try {
+      TypedQuery<BookHibernate> query =
+          em.createQuery("SELECT t FROM BookHibernate t WHERE t.isbn = :isbn", BookHibernate.class);
+      query.setParameter("isbn", isbn);
+      return query.getSingleResult();
+    } finally {
+      em.close();
+    }
+  }
+
   /** This one manages the transaction. */
   @Override
   public BookHibernate saveNewBook(BookHibernate book) {

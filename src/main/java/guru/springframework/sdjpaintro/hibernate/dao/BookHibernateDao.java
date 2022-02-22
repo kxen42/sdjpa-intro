@@ -10,6 +10,8 @@ public interface BookHibernateDao {
 
   BookHibernate findBookByTitle(String title);
 
+  BookHibernate findByIsbn(String isbn);
+
   BookHibernate saveNewBook(BookHibernate book);
 
   BookHibernate updateBook(BookHibernate book);
