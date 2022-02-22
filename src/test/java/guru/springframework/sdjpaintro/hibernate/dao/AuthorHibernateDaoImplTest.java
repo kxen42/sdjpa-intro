@@ -3,6 +3,8 @@ package guru.springframework.sdjpaintro.hibernate.dao;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceException;
@@ -153,6 +155,19 @@ class AuthorHibernateDaoImplTest {
     void findAll() {
       assertThat(authorDao.findAll().count()).isGreaterThanOrEqualTo(3);
       authorDao.findAll().forEach(System.out::println);
+    }
+
+    @Test
+    void listAuthorByLastNameLike() {
+      List<AuthorHibernate> al = authorDao.listAuthorByLastNameLike("_a%");
+      al.forEach(System.out::println);
+
+      assertThat(al).isNotEmpty();
+
+      List<AuthorHibernate> z = authorDao.listAuthorByLastNameLike("z%");
+      z.forEach(System.out::println);
+
+      assertThat(z).isEmpty();
     }
   }
 }

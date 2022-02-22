@@ -1,5 +1,6 @@
 package guru.springframework.sdjpaintro.hibernate.dao;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import guru.springframework.sdjpaintro.hibernate.domain.AuthorHibernate;
@@ -19,4 +20,6 @@ public interface AuthorHibernateDao {
     void deleteAuthorById(Long id);
 
   Stream<AuthorHibernate> findAll();
+
+  List<AuthorHibernate> listAuthorByLastNameLike(String pattern);
 }

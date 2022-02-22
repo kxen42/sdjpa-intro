@@ -1,11 +1,10 @@
 package guru.springframework.sdjpaintro.hibernate.dao;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.stream.Stream;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -126,6 +125,21 @@ public class AuthorHibernateDaoImpl implements AuthorHibernateDao {
     TypedQuery<AuthorHibernate> query =
         getEntityManager().createQuery("SELECT a FROM AuthorHibernate a", AuthorHibernate.class);
     return query.getResultStream();
+  }
+
+  @Override
+  public List<AuthorHibernate> listAuthorByLastNameLike(String pattern) {
+    EntityManager em = getEntityManager();
+    try {
+      // he's going to enforce the type with the cast
+      Query query =
+          em.createQuery("SELECT a FROM AuthorHibernate a WHERE a.lastName LIKE :lastname");
+      query.setParameter("lastname", pattern);
+      List<AuthorHibernate> resultList = query.getResultList();
+      return resultList;
+    } finally {
+      em.close();
+    }
   }
 
   private EntityManager getEntityManager() {
