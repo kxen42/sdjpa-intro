@@ -76,7 +76,10 @@ public class AuthorHibernateDaoImpl implements AuthorHibernateDao {
 
     // Hibernate sets the ID when the persistence action happens, return the object passed to
     // persist().
-    return em.find(AuthorHibernate.class, createdId.longValue());
+    AuthorHibernate newAuthor = em.find(AuthorHibernate.class, createdId.longValue());
+    em.close(); // close EntityManager or risk running out of connections
+
+    return newAuthor;
   }
 
   // Caution: When Hibernate is being lazy
@@ -90,6 +93,7 @@ public class AuthorHibernateDaoImpl implements AuthorHibernateDao {
     em.persist(author);
     em.flush(); // do it NOW!
     em.getTransaction().commit();
+    em.close();
     // Hibernate added ID
     return author;
   }
@@ -98,10 +102,11 @@ public class AuthorHibernateDaoImpl implements AuthorHibernateDao {
   public AuthorHibernate updateAuthor(AuthorHibernate author) {
     EntityManager em = getEntityManager();
     em.getTransaction().begin();
-    em.merge(author);
+    AuthorHibernate merged = em.merge(author);
     em.flush();
     em.getTransaction().commit();
-    return em.find(AuthorHibernate.class, author.getId());
+    em.close();
+    return merged;
   }
 
   @Override
@@ -112,6 +117,7 @@ public class AuthorHibernateDaoImpl implements AuthorHibernateDao {
     em.remove(author);
     em.flush(); // do it NOW! don't linger in the cache "push it out of the cache"
     em.getTransaction().commit();
+    em.close();
   }
 
   @Override
