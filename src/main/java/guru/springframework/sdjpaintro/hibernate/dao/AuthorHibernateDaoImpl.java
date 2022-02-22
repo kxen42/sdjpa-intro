@@ -2,7 +2,6 @@ package guru.springframework.sdjpaintro.hibernate.dao;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.stream.Stream;
 
 import javax.persistence.*;
 
@@ -120,11 +119,14 @@ public class AuthorHibernateDaoImpl implements AuthorHibernateDao {
   }
 
   @Override
-  public Stream<AuthorHibernate> findAll() {
+  public List<AuthorHibernate> findAll() {
     // just one of the many ways to do this
-    TypedQuery<AuthorHibernate> query =
-        getEntityManager().createQuery("SELECT a FROM AuthorHibernate a", AuthorHibernate.class);
-    return query.getResultStream();
+    EntityManager em = getEntityManager();
+    try {
+      return em.createNamedQuery("find_all", AuthorHibernate.class).getResultList();
+    } finally {
+      em.close();
+    }
   }
 
   @Override

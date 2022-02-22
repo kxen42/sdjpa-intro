@@ -153,7 +153,7 @@ class AuthorHibernateDaoImplTest {
 
     @Test
     void findAll() {
-      assertThat(authorDao.findAll().count()).isGreaterThanOrEqualTo(3);
+      assertThat(authorDao.findAll()).isNotEmpty();
       authorDao.findAll().forEach(System.out::println);
     }
 

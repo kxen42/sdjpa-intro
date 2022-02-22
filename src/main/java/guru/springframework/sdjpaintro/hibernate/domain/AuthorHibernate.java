@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.NaturalId;
 
+@NamedQuery(name = "find_all", query = "FROM AuthorHibernate")
 @Entity
 public class AuthorHibernate {
 
@@ -96,5 +97,5 @@ public class AuthorHibernate {
         .add("lastName='" + lastName + "'")
         .add("someMutableField='" + someMutableField + "'")
         .toString();
-    }
+  }
 }
