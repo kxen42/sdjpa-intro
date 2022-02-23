@@ -10,6 +10,8 @@ public interface AuthorHibernateDao {
 
   AuthorHibernate findAuthorByName(String firstName, String lastName);
 
+  List<AuthorHibernate> findByLastName(String lastName);
+
   AuthorHibernate saveNewAuthor(AuthorHibernate author);
 
   AuthorHibernate alternateSaveNewAuthor(AuthorHibernate author);

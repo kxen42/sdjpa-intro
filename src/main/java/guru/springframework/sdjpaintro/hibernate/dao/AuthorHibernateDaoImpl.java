@@ -120,10 +120,21 @@ public class AuthorHibernateDaoImpl implements AuthorHibernateDao {
 
   @Override
   public List<AuthorHibernate> findAll() {
-    // just one of the many ways to do this
     EntityManager em = getEntityManager();
     try {
       return em.createNamedQuery("find_all", AuthorHibernate.class).getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  @Override
+  public List<AuthorHibernate> findByLastName(String lastName) {
+    EntityManager em = getEntityManager();
+    try {
+      return em.createNamedQuery("find_by_lastname", AuthorHibernate.class)
+          .setParameter("last_name", lastName)
+          .getResultList();
     } finally {
       em.close();
     }

@@ -158,6 +158,11 @@ class AuthorHibernateDaoImplTest {
     }
 
     @Test
+    void findByLastName() {
+      assertThat(authorDao.findByLastName("Walls")).isNotEmpty();
+    }
+
+    @Test
     void listAuthorByLastNameLike() {
       List<AuthorHibernate> al = authorDao.listAuthorByLastNameLike("_a%");
       al.forEach(System.out::println);
