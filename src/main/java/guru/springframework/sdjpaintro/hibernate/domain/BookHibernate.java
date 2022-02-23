@@ -7,6 +7,11 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.NaturalId;
 
+// R.O.T. use NamedQueries so any DAO could use them.
+@NamedQueries({
+  @NamedQuery(name = "book_find_all", query = "FROM BookHibernate"),
+  @NamedQuery(name = "find_by_title", query = "FROM BookHibernate a WHERE a.title = :title")
+})
 @Entity
 public class BookHibernate {
 

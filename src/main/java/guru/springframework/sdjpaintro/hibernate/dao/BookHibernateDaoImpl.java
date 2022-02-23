@@ -25,20 +25,23 @@ public class BookHibernateDaoImpl implements BookHibernateDao {
   @Override
   public BookHibernate getById(Long id) {
     EntityManager em = getEntityManager();
-    BookHibernate book = em.find(BookHibernate.class, id);
-    em.close();
-    return book;
+    try {
+      return em.find(BookHibernate.class, id);
+    } finally {
+      em.close();
+    }
   }
 
   @Override
   public BookHibernate findBookByTitle(String title) {
     EntityManager em = getEntityManager();
-    TypedQuery<BookHibernate> query =
-        em.createQuery("SELECT b FROM BookHibernate b where b.title = :title", BookHibernate.class);
-    query.setParameter("title", title);
-    BookHibernate book = query.getSingleResult();
-    em.close();
-    return book;
+    try {
+      return em.createNamedQuery("find_by_title", BookHibernate.class)
+          .setParameter("title", title)
+          .getSingleResult();
+    } finally {
+      em.close();
+    }
   }
 
   @Override
@@ -61,46 +64,52 @@ public class BookHibernateDaoImpl implements BookHibernateDao {
     // make sure the ID was generated and assigned before we return book
     // the new book be attached, detached, etc.
     EntityManager em = getEntityManager();
-    em.getTransaction().begin();
-    em.persist(book);
-    em.flush();
-    em.getTransaction().commit();
-    em.close();
-    return book;
+    try {
+      em.getTransaction().begin();
+      em.persist(book);
+      em.flush();
+      em.getTransaction().commit();
+      return book;
+    } finally {
+      em.close();
+    }
   }
 
   @Override
   public BookHibernate updateBook(BookHibernate book) {
     EntityManager em = getEntityManager();
-    em.getTransaction().begin();
-    System.out.println("BookHibernateDaoImpl.updateBook book: " + book);
-    BookHibernate updated = em.merge(book);
-
-    em.flush();
-    em.getTransaction().commit();
-    em.close();
-    System.out.println("BookHibernateDaoImpl.updateBook updated: " + updated);
-    return updated;
+    try {
+      em.getTransaction().begin();
+      BookHibernate updated = em.merge(book);
+      em.flush();
+      em.getTransaction().commit();
+      return updated;
+    } finally {
+      em.close();
+    }
   }
 
   @Override
   public List<BookHibernate> findAll() {
     EntityManager em = getEntityManager();
-    List<BookHibernate> result =
-        em.createQuery("SELECT h FROM BookHibernate h", BookHibernate.class).getResultList();
-
-    em.close();
-    return result;
+    try {
+      return em.createNamedQuery("book_find_all", BookHibernate.class).getResultList();
+    } finally {
+      em.close();
+    }
   }
 
   @Override
   public void deleteBookById(Long id) {
     EntityManager em = getEntityManager();
     // remember - Hibernate Tx is in a different context from that of Spring
-    em.getTransaction().begin();
-    em.remove(em.find(BookHibernate.class, id));
-    em.getTransaction().commit();
-    em.close();
+    try {
+      em.getTransaction().begin();
+      em.remove(em.find(BookHibernate.class, id));
+      em.getTransaction().commit();
+    } finally {
+      em.close();
+    }
   }
 
   @Override
