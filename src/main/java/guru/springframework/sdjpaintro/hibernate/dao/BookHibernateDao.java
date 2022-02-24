@@ -21,4 +21,6 @@ public interface BookHibernateDao {
   List<BookHibernate> findAll();
 
   BookHibernate updatePrice(Long id, String price);
+
+  BookHibernate findBookByTitleCriteria(String title);
 }

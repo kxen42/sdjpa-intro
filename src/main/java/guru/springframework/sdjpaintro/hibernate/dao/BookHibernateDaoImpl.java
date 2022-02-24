@@ -5,6 +5,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Component;
 
@@ -132,6 +135,22 @@ public class BookHibernateDaoImpl implements BookHibernateDao {
       em.close();
     }
     return null;
+  }
+
+  @Override
+  public BookHibernate findBookByTitleCriteria(String title) {
+    EntityManager em = getEntityManager();
+
+    try {
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<BookHibernate> cr = cb.createQuery(BookHibernate.class);
+      Root<BookHibernate> root = cr.from(BookHibernate.class);
+
+      cr.select(root).where(cb.equal(root.get("title"), title));
+      return em.createQuery(cr).getSingleResult();
+    } finally {
+      em.close();
+    }
   }
 
   private EntityManager getEntityManager() {

@@ -23,4 +23,6 @@ public interface AuthorHibernateDao {
   List<AuthorHibernate> findAll();
 
   List<AuthorHibernate> listAuthorByLastNameLike(String pattern);
+
+  AuthorHibernate findAuthorByNameCriteria(String firstName, String lastName);
 }

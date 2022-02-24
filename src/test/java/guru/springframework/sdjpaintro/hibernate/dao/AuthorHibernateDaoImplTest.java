@@ -174,5 +174,11 @@ class AuthorHibernateDaoImplTest {
 
       assertThat(z).isEmpty();
     }
+
+    @Test
+    void findAuthorByNameCriteria() {
+      AuthorHibernate found = authorDao.findAuthorByNameCriteria("Craig", "Walls");
+      assertThat(found).isNotNull();
+    }
   }
 }

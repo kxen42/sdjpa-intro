@@ -59,6 +59,12 @@ class BookHibernateDaoImplTest {
       BookHibernate found = bookDao.findByIsbn("978-1617294945");
       assertThat(found.getTitle()).isEqualTo("Spring in Action, 5th Edition");
     }
+
+    @Test
+    void findBookByTitleCriteria() {
+      BookHibernate book = bookDao.findBookByTitleCriteria("Clean Code");
+      assertThat(book).isNotNull();
+    }
   }
 
   @Nested

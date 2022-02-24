@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.*;
+import javax.persistence.criteria.*;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -148,8 +149,36 @@ public class AuthorHibernateDaoImpl implements AuthorHibernateDao {
       Query query =
           em.createQuery("SELECT a FROM AuthorHibernate a WHERE a.lastName LIKE :lastname");
       query.setParameter("lastname", pattern);
-      List<AuthorHibernate> resultList = query.getResultList();
-      return resultList;
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  @Override
+  public AuthorHibernate findAuthorByNameCriteria(String firstName, String lastName) {
+    EntityManager em = getEntityManager();
+
+    try {
+      CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+      CriteriaQuery<AuthorHibernate> criteriaQuery =
+          criteriaBuilder.createQuery(AuthorHibernate.class);
+
+      Root<AuthorHibernate> root = criteriaQuery.from(AuthorHibernate.class);
+
+      ParameterExpression<String> firstNameParam = criteriaBuilder.parameter(String.class);
+      ParameterExpression<String> lastNameParam = criteriaBuilder.parameter(String.class);
+
+      Predicate firstNamePred = criteriaBuilder.equal(root.get("firstName"), firstNameParam);
+      Predicate lastNamePred = criteriaBuilder.equal(root.get("lastName"), lastNameParam);
+
+      criteriaQuery.select(root).where(criteriaBuilder.and(firstNamePred, lastNamePred));
+
+      TypedQuery<AuthorHibernate> typedQuery = em.createQuery(criteriaQuery);
+      typedQuery.setParameter(firstNameParam, firstName);
+      typedQuery.setParameter(lastNameParam, lastName);
+
+      return typedQuery.getSingleResult();
     } finally {
       em.close();
     }
