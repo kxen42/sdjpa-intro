@@ -14,8 +14,17 @@ public class AuthorJpa {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  // an attempt to update an @NaturalId results in
+  //   org.springframework.orm.jpa.JpaSystemException: An immutable natural identifier of
+  //   entity guru.springframework.sdjpaintro.jpa.domain.AuthorJpa was altered from `Tentpeg` to
+  // `Doe`;
+  //   nested exception is org.hibernate.HibernateException: An immutable natural identifier of
+  //   entity guru.springframework.sdjpaintro.jpa.domain.AuthorJpa was altered from `Tentpeg` to
+  // `Doe`
+
   @NaturalId private String firstName;
   @NaturalId private String lastName;
+  private String profilePicture;
 
   public AuthorJpa() {}
 
@@ -46,6 +55,14 @@ public class AuthorJpa {
 
   public void setLastName(String lastName) {
     this.lastName = lastName;
+  }
+
+  public String getProfilePicture() {
+    return profilePicture;
+  }
+
+  public void setProfilePicture(String profilePicture) {
+    this.profilePicture = profilePicture;
   }
 
   /*
@@ -84,6 +101,7 @@ public class AuthorJpa {
         .add("id=" + id)
         .add("firstName='" + firstName + "'")
         .add("lastName='" + lastName + "'")
+        .add("profilePicture='" + profilePicture + "'")
         .toString();
   }
 }

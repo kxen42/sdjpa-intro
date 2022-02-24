@@ -18,6 +18,7 @@ public class AuthorJpaDaoImpl implements AuthorJpaDao {
     this.authorRepository = authorRepository;
   }
 
+  // separation of concerns - using DAO to call Repo rather than doing so in a service
   @Override
   public AuthorJpa getById(Long id) {
     return authorRepository.getById(id);
@@ -32,6 +33,7 @@ public class AuthorJpaDaoImpl implements AuthorJpaDao {
   @Override
   public AuthorJpa optionalFindJpaByName(String lastName) {
     // this is just for show, obviously lastname isn't uniq
+    // in the repository this findAuthJpaByLastName returns Option<AuthorJpa>
     return authorRepository
         .findAuthJpaByLastName(lastName)
         .orElseThrow(EntityNotFoundException::new);
@@ -53,8 +55,7 @@ public class AuthorJpaDaoImpl implements AuthorJpaDao {
     AuthorJpa fetched = authorRepository.getById(author.getId());
 
     // This is a job for ModelMapper
-    fetched.setFirstName(author.getFirstName());
-    fetched.setLastName(author.getLastName());
+    fetched.setProfilePicture(author.getProfilePicture());
     return authorRepository.save(fetched);
   }
 
