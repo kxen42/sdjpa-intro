@@ -25,4 +25,6 @@ public interface AuthorHibernateDao {
   List<AuthorHibernate> listAuthorByLastNameLike(String pattern);
 
   AuthorHibernate findAuthorByNameCriteria(String firstName, String lastName);
+
+  AuthorHibernate findAuthorByNameNative(String firstName, String lastName);
 }

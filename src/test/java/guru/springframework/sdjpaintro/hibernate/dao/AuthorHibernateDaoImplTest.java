@@ -180,5 +180,11 @@ class AuthorHibernateDaoImplTest {
       AuthorHibernate found = authorDao.findAuthorByNameCriteria("Craig", "Walls");
       assertThat(found).isNotNull();
     }
+
+    @Test
+    void findAuthorByNameNative() {
+      AuthorHibernate found = authorDao.findAuthorByNameNative("Craig", "Walls");
+      assertThat(found).isNotNull();
+    }
   }
 }

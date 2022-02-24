@@ -65,6 +65,12 @@ class BookHibernateDaoImplTest {
       BookHibernate book = bookDao.findBookByTitleCriteria("Clean Code");
       assertThat(book).isNotNull();
     }
+
+    @Test
+    void findBookByTitleNative() {
+      BookHibernate book = bookDao.findBookByTitleNative("Clean Code");
+      assertThat(book).isNotNull();
+    }
   }
 
   @Nested

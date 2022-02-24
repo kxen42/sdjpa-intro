@@ -23,4 +23,6 @@ public interface BookHibernateDao {
   BookHibernate updatePrice(Long id, String price);
 
   BookHibernate findBookByTitleCriteria(String title);
+
+  BookHibernate findBookByTitleNative(String title);
 }

@@ -184,6 +184,25 @@ public class AuthorHibernateDaoImpl implements AuthorHibernateDao {
     }
   }
 
+  @Override
+  public AuthorHibernate findAuthorByNameNative(String firstName, String lastName) {
+    EntityManager em = getEntityManager();
+    try {
+      // createNativeQuery does not create a TypedQuery
+      // the type you give is used to map the values to the object properties
+      // otherwise; you get an Object[]
+      return (AuthorHibernate)
+          em.createNativeQuery(
+                  "SELECT * FROM author_hibernate WHERE first_name=:first_name AND last_name=:last_name",
+                  AuthorHibernate.class)
+              .setParameter("first_name", firstName)
+              .setParameter("last_name", lastName)
+              .getSingleResult();
+    } finally {
+      em.close();
+    }
+  }
+
   private EntityManager getEntityManager() {
     return emf.createEntityManager();
   }

@@ -153,6 +153,22 @@ public class BookHibernateDaoImpl implements BookHibernateDao {
     }
   }
 
+  @Override
+  public BookHibernate findBookByTitleNative(String title) {
+    EntityManager em = getEntityManager();
+
+    try {
+
+      return (BookHibernate)
+          em.createNativeQuery(
+                  "SELECT * FROM book_hibernate WHERE title=:title", BookHibernate.class)
+              .setParameter("title", title)
+              .getSingleResult();
+    } finally {
+      em.close();
+    }
+  }
+
   private EntityManager getEntityManager() {
     return emf.createEntityManager();
   }
