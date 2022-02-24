@@ -60,11 +60,13 @@ public class BookJpaDaoIntegrationTest {
     BookJpa original = bookDao.saveNewBookJpa(initialBook);
     System.out.println("BookJpaDaoIntegrationTest.updateBookJpaTest original=" + original);
 
+    original.setPublisher("Dewey, Cheatham, and Howe");
     original.setTitle("New BookJpa");
     bookDao.updateBookJpa(original);
 
     BookJpa updated = bookDao.getById(original.getId());
     assertThat(updated.getTitle()).isEqualTo("New BookJpa");
+    assertThat(updated.getPublisher()).isEqualTo("Dewey, Cheatham, and Howe");
     System.out.println("BookJpaDaoIntegrationTest.updateBookJpaTest updated=" + updated);
   }
 
@@ -95,5 +97,11 @@ public class BookJpaDaoIntegrationTest {
     BookJpa book = bookDao.getById(initialBook.getId());
     assertThat(book.getId()).isNotNull();
     System.out.println("BookJpaDaoIntegrationTest.testGetBookJpa book=" + book);
+  }
+
+  @Test
+  void findBookByTitle() {
+    BookJpa found = bookDao.findBookByTitle(initialBook.getTitle());
+    assertThat(found).isNotNull();
   }
 }

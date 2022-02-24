@@ -11,22 +11,20 @@ import guru.springframework.sdjpaintro.jpa.repository.BookJpaRepository;
 @Component
 public class BookJpaDaoImpl implements BookJpaDao {
 
-    BookJpaRepository repository;
+  BookJpaRepository repository;
 
-    public BookJpaDaoImpl(BookJpaRepository repository) {
-        this.repository = repository;
-    }
+  public BookJpaDaoImpl(BookJpaRepository repository) {
+    this.repository = repository;
+  }
 
-    @Override
+  @Override
   public BookJpa getById(Long id) {
     return repository.getById(id);
   }
 
   @Override
   public BookJpa getBookJpaByName(String name) {
-    return repository
-        .findBookJpaByTitle(name)
-        .orElseThrow(EntityNotFoundException::new);
+    return repository.findBookJpaByTitle(name).orElseThrow(EntityNotFoundException::new);
   }
 
   @Override
@@ -37,8 +35,7 @@ public class BookJpaDaoImpl implements BookJpaDao {
   @Transactional
   @Override
   public BookJpa updateBookJpa(BookJpa book) {
-      BookJpa fetched = repository.getById(book.getId());
-      fetched.setIsbn(book.getIsbn());
+    BookJpa fetched = repository.getById(book.getId());
     fetched.setPublisher(book.getPublisher());
     fetched.setTitle(book.getTitle());
     return repository.save(fetched);
@@ -46,6 +43,11 @@ public class BookJpaDaoImpl implements BookJpaDao {
 
   @Override
   public void deleteBookJpaById(Long id) {
-        repository.deleteById(id);
+    repository.deleteById(id);
+  }
+
+  @Override
+  public BookJpa findBookByTitle(String title) {
+    return repository.findBookJpaByTitle(title).orElseThrow(EntityNotFoundException::new);
   }
 }

@@ -13,4 +13,6 @@ public interface BookJpaDao {
   BookJpa updateBookJpa(BookJpa book);
 
   void deleteBookJpaById(Long id);
+
+  BookJpa findBookByTitle(String title);
 }
