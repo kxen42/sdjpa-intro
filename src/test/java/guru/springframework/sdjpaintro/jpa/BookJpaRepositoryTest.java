@@ -95,4 +95,10 @@ public class BookJpaRepositoryTest {
     BookJpa found = repository.findBookByTitleNativeQuery("Clean Code");
     assertNotNull(found);
   }
+
+  @Test
+  void findBookByTitleNamedQuery() {
+    BookJpa found = repository.jpaNamed("Clean Code");
+    assertNotNull(found);
+  }
 }

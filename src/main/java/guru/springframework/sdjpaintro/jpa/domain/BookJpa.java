@@ -8,6 +8,11 @@ import javax.persistence.*;
 import org.hibernate.annotations.NaturalId;
 
 /** For the Spring Data JPA only examples. */
+// This named query uses the Annotation-based configuration
+// https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.named-queries.annotation-based-configuration
+// Queries annotated to the query method take precedence over queries defined using @NamedQuery or
+// named queries declared in orm.xml.
+@NamedQuery(name = "BookJpa.jpaNamed", query = "FROM BookJpa b where b.title = :title")
 @Entity
 public class BookJpa {
   @Id
