@@ -2,11 +2,9 @@ package guru.springframework.sdjpaintro.jdbctemplate.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
 
 import guru.springframework.sdjpaintro.jdbctemplate.domain.AuthorJdbcTemplate;
 
-@Component
 public class AuthorJdbcTemplateDaoImpl implements AuthorJdbcTemplateDao {
 
   private final JdbcTemplate jdbcTemplate;

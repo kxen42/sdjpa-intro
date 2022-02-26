@@ -1,12 +1,12 @@
 package guru.springframework.sdjpaintro.jdbctemplate.dao;
 
+import java.util.List;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
 
 import guru.springframework.sdjpaintro.jdbctemplate.domain.BookJdbcTemplate;
 
-@Component
 public class BookJdbcTemplateDaoImpl implements BookJdbcTemplateDao {
 
   private final JdbcTemplate jdbcTemplate;
@@ -25,6 +25,17 @@ public class BookJdbcTemplateDaoImpl implements BookJdbcTemplateDao {
   public BookJdbcTemplate findBookByTitle(String title) {
     return jdbcTemplate.queryForObject(
         "SELECT * FROM book_jdbctemplate WHERE title = ?", getRowMapper(), title);
+  }
+
+  @Override
+  public List<BookJdbcTemplate> findAllBooks(Integer size, Integer offset) {
+    return jdbcTemplate.query(
+        "SELECT * FROM book_jdbctemplate limit ? offset ?", getRowMapper(), size, offset);
+  }
+
+  @Override
+  public List<BookJdbcTemplate> findAllBooks() {
+    return jdbcTemplate.query("SELECT * FROM book_jdbctemplate", getRowMapper());
   }
 
   @Override

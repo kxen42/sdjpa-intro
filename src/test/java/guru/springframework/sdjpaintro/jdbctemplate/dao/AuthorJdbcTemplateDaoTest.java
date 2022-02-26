@@ -3,14 +3,12 @@ package guru.springframework.sdjpaintro.jdbctemplate.dao;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +17,17 @@ import guru.springframework.sdjpaintro.jdbctemplate.domain.AuthorJdbcTemplate;
 @ActiveProfiles("local")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ComponentScan(basePackages = {"guru.springframework.sdjpaintro.jdbctemplate.dao"})
 class AuthorJdbcTemplateDaoTest {
 
+  @Autowired JdbcTemplate jdbcTemplate;
+  AuthorJdbcTemplateDao authorDao;
+
   static final AuthorJdbcTemplate gaiman = new AuthorJdbcTemplate("Neil", "Gaiman", null);
-  @Autowired AuthorJdbcTemplateDao authorDao;
+
+  @BeforeEach
+  void setup() {
+    authorDao = new AuthorJdbcTemplateDaoImpl(jdbcTemplate);
+  }
 
   @Nested
   @DisplayName("Read Operations")

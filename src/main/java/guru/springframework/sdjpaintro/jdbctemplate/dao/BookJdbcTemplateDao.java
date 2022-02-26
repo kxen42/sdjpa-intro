@@ -1,5 +1,7 @@
 package guru.springframework.sdjpaintro.jdbctemplate.dao;
 
+import java.util.List;
+
 import guru.springframework.sdjpaintro.jdbctemplate.domain.BookJdbcTemplate;
 
 public interface BookJdbcTemplateDao {
@@ -12,4 +14,8 @@ public interface BookJdbcTemplateDao {
   BookJdbcTemplate updateBook(BookJdbcTemplate book);
 
   void deleteBookById(Long id);
+
+  List<BookJdbcTemplate> findAllBooks(Integer size, Integer offset);
+
+  List<BookJdbcTemplate> findAllBooks();
 }
