@@ -3,6 +3,7 @@ package guru.springframework.sdjpaintro.jpa;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -100,5 +101,12 @@ public class BookJpaRepositoryTest {
   void findBookByTitleNamedQuery() {
     BookJpa found = repository.jpaNamed("Clean Code");
     assertNotNull(found);
+  }
+
+  @Test
+  void findAll() {
+    List<BookJpa> found = repository.findAll();
+    assertNotNull(found);
+    assertFalse(found.isEmpty());
   }
 }

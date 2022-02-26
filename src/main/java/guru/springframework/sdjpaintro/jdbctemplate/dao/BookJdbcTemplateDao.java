@@ -2,6 +2,8 @@ package guru.springframework.sdjpaintro.jdbctemplate.dao;
 
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
+
 import guru.springframework.sdjpaintro.jdbctemplate.domain.BookJdbcTemplate;
 
 public interface BookJdbcTemplateDao {
@@ -18,4 +20,6 @@ public interface BookJdbcTemplateDao {
   List<BookJdbcTemplate> findAllBooks(Integer size, Integer offset);
 
   List<BookJdbcTemplate> findAllBooks();
+
+  List<BookJdbcTemplate> findAllBooks(PageRequest pageable);
 }

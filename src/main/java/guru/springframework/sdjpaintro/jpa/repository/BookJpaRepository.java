@@ -1,5 +1,6 @@
 package guru.springframework.sdjpaintro.jpa.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Future;
 import java.util.stream.Stream;
@@ -51,4 +52,6 @@ public interface BookJpaRepository extends JpaRepository<BookJpa, Long> {
   your entity class, followed by “.” and the name of your repository method.
    */
   BookJpa jpaNamed(@Param("title") String title);
+
+  List<BookJpa> findAll();
 }

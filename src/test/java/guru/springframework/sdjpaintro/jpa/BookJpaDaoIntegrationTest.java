@@ -3,6 +3,8 @@ package guru.springframework.sdjpaintro.jpa;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,5 +105,23 @@ public class BookJpaDaoIntegrationTest {
   void findBookByTitle() {
     BookJpa found = bookDao.findBookByTitle(initialBook.getTitle());
     assertThat(found).isNotNull();
+  }
+
+  @Test
+  void findAllBooksPaged() {
+    List<BookJpa> page = bookDao.findAllBooks(0, 2);
+    assertThat(page).isNotNull().size().isLessThanOrEqualTo(2);
+    System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxx");
+    page.forEach(System.out::println);
+    System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxx");
+  }
+
+  @Test
+  void findAllBooksNotPaged() {
+    List<BookJpa> page = bookDao.findAllBooks();
+    assertThat(page).isNotNull().size().isGreaterThanOrEqualTo(5);
+    System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxx");
+    page.forEach(System.out::println);
+    System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxx");
   }
 }

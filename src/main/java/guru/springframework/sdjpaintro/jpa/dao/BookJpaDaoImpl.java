@@ -1,8 +1,11 @@
 package guru.springframework.sdjpaintro.jpa.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import guru.springframework.sdjpaintro.jpa.domain.BookJpa;
@@ -49,5 +52,20 @@ public class BookJpaDaoImpl implements BookJpaDao {
   @Override
   public BookJpa findBookByTitle(String title) {
     return repository.findBookJpaByTitle(title).orElseThrow(EntityNotFoundException::new);
+  }
+
+  @Override
+  public List<BookJpa> findAllBooks(Integer size, Integer offset) {
+    return null;
+  }
+
+  @Override
+  public List<BookJpa> findAllBooks() {
+    return repository.findAll();
+  }
+
+  @Override
+  public List<BookJpa> findAllBooks(Pageable pageable) {
+    return null;
   }
 }

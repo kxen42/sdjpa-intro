@@ -2,6 +2,7 @@ package guru.springframework.sdjpaintro.jdbctemplate.dao;
 
 import java.util.List;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -29,6 +30,7 @@ public class BookJdbcTemplateDaoImpl implements BookJdbcTemplateDao {
 
   @Override
   public List<BookJdbcTemplate> findAllBooks(Integer size, Integer offset) {
+    // Using standard SQL LIMIT-clause
     return jdbcTemplate.query(
         "SELECT * FROM book_jdbctemplate limit ? offset ?", getRowMapper(), size, offset);
   }
@@ -36,6 +38,16 @@ public class BookJdbcTemplateDaoImpl implements BookJdbcTemplateDao {
   @Override
   public List<BookJdbcTemplate> findAllBooks() {
     return jdbcTemplate.query("SELECT * FROM book_jdbctemplate", getRowMapper());
+  }
+
+  @Override
+  public List<BookJdbcTemplate> findAllBooks(PageRequest pageable) {
+    // Using standard SQL LIMIT-clause
+    return jdbcTemplate.query(
+        "SELECT * FROM book_jdbctemplate limit ? offset ?",
+        getRowMapper(),
+        pageable.getPageSize(),
+        pageable.getOffset());
   }
 
   @Override
