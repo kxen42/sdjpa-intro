@@ -1,9 +1,11 @@
 package guru.springframework.sdjpaintro.jdbctemplate.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,28 +97,42 @@ class BookJdbcTemplateDaoTest {
       page.forEach(System.out::println);
       System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxx");
     }
-  }
 
-  @Test
-  void findAllBooks_pageable() {
-    List<BookJdbcTemplate> allBooks = bookDao.findAllBooks();
-    assertThat(allBooks).isNotNull().size().isEqualTo(5);
+    @Test
+    void findAllBooks_pageable() {
+      List<BookJdbcTemplate> allBooks = bookDao.findAllBooks();
+      assertThat(allBooks).isNotNull().size().isEqualTo(5);
 
-    List<BookJdbcTemplate> page0 = bookDao.findAllBooks(PageRequest.of(0, 2));
+      List<BookJdbcTemplate> page0 = bookDao.findAllBooks(PageRequest.of(0, 2));
 
-    assertThat(page0).isNotNull().size().isEqualTo(2);
+      assertThat(page0).isNotNull().size().isEqualTo(2);
 
-    List<BookJdbcTemplate> page1 = bookDao.findAllBooks(PageRequest.of(1, 2));
+      List<BookJdbcTemplate> page1 = bookDao.findAllBooks(PageRequest.of(1, 2));
 
-    assertThat(page1).isNotNull().size().isEqualTo(2);
+      assertThat(page1).isNotNull().size().isEqualTo(2);
 
-    List<BookJdbcTemplate> page2 = bookDao.findAllBooks(PageRequest.of(2, 2));
+      List<BookJdbcTemplate> page2 = bookDao.findAllBooks(PageRequest.of(2, 2));
 
-    assertThat(page2).isNotNull().size().isEqualTo(1);
+      assertThat(page2).isNotNull().size().isEqualTo(1);
 
-    List<BookJdbcTemplate> books = bookDao.findAllBooks(PageRequest.of(3, 2));
+      List<BookJdbcTemplate> books = bookDao.findAllBooks(PageRequest.of(3, 2));
 
-    assertThat(books).isNotNull().isEmpty();
+      assertThat(books).isNotNull().isEmpty();
+    }
+
+    @Test
+    void findAllBooksSortByTitle() {
+      List<BookJdbcTemplate> found =
+          bookDao.findAllBooksSortByTitle(PageRequest.of(0, 5, Sort.by(Sort.Order.desc("title"))));
+      assertThat(found).isNotNull().size().isLessThanOrEqualTo(5);
+
+      // My attempt to test result sorting
+      List<BookJdbcTemplate> expected =
+          found.stream()
+              .sorted((o1, o2) -> o2.getTitle().compareTo(o1.getTitle()))
+              .collect(Collectors.toList());
+      assertIterableEquals(found, expected);
+    }
   }
 
   @Nested

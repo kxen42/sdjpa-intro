@@ -2,7 +2,7 @@ package guru.springframework.sdjpaintro.jdbctemplate.dao;
 
 import java.util.List;
 
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -41,13 +41,30 @@ public class BookJdbcTemplateDaoImpl implements BookJdbcTemplateDao {
   }
 
   @Override
-  public List<BookJdbcTemplate> findAllBooks(PageRequest pageable) {
+  public List<BookJdbcTemplate> findAllBooks(Pageable pageable) {
     // Using standard SQL LIMIT-clause
     return jdbcTemplate.query(
         "SELECT * FROM book_jdbctemplate limit ? offset ?",
         getRowMapper(),
         pageable.getPageSize(),
         pageable.getOffset());
+  }
+
+  @Override
+  public List<BookJdbcTemplate> findAllBooksSortByTitle(Pageable pageable) {
+    // This shows that with JdbcTemplate this can be a brittle mess
+    // NPE will be thrown if 'title' doesn't exist
+    // for every column in the order by requires more ugly code
+    // order of columns is hard code
+    String sql =
+        "SELECT * FROM book_jdbctemplate ORDER BY title "
+            + pageable.getSort().getOrderFor("title").getDirection().name()
+            + " LIMIT ? OFFSET ?";
+
+    System.out.println(
+        "BookJdbcTemplateDaoImpl.findAllBooksSortByTitle look what I can do sql:" + sql);
+
+    return jdbcTemplate.query(sql, getRowMapper(), pageable.getPageSize(), pageable.getOffset());
   }
 
   @Override
