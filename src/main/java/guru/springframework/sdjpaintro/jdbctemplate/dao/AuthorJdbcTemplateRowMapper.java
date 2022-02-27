@@ -2,7 +2,6 @@ package guru.springframework.sdjpaintro.jdbctemplate.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -23,15 +22,18 @@ public class AuthorJdbcTemplateRowMapper implements RowMapper<AuthorJdbcTemplate
     author.setFirstName(rs.getString("first_name"));
     author.setLastName(rs.getString("last_name"));
 
-    // only applies to query that include a BookJdbcTemplate
-//    if (rs.getString("isbn") != null) {
-//      author.setBooks(new ArrayList<>());
-//      author.getBooks().add(mapBook(rs));
-//    }
-
-    while (rs.next()) {
-      author.getBooks().add(mapBook(rs));
-    }
+    // Indeed, in hi branch this part is absent
+    // https://github.com/springframeworkguru/sdjpa-spring-data-jpa/blob/find-all-author-jdbc/src/main/java/guru/springframework/jdbc/dao/AuthorMapper.java
+    // This causes AuthorJdbcTemplate.findAllAuthorsByLastName for fail with a
+    // java.sql.SQLException: Column Index out of range, 4 > 3
+    // Don't think this part was ever properly implemented. It never made sense to me
+    // bad code    if (rs.getString("isbn") != null) {
+    // bad code    author.setBooks(new ArrayList<>());
+    // bad code   author.getBooks().add(mapBook(rs));
+    // bad code   }
+    // bad code   while (rs.next()) {
+    // bad code   author.getBooks().add(mapBook(rs));
+    // bad code   }
 
     return author;
   }

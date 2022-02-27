@@ -1,5 +1,8 @@
 package guru.springframework.sdjpaintro.jdbctemplate.dao;
 
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -36,6 +39,26 @@ public class AuthorJdbcTemplateDaoImpl implements AuthorJdbcTemplateDao {
             + "LEFT OUTER JOIN book_jdbctemplate book ON author.id = book.author_id WHERE author.id = ?";
 
     return jdbcTemplate.query(sql, new AuthorExtractor(), id);
+  }
+
+  @SuppressWarnings("squid:S1149")
+  @Override
+  public List<AuthorJdbcTemplate> findAllAuthorsByLastName(String lastName, Pageable pageable) {
+    // must have thread safe string 'builder'
+    StringBuffer sb = new StringBuffer();
+
+    sb.append("SELECT * FROM author_jdbctemplate WHERE last_name = ? ");
+
+    // The parameter name has to match Sort.by(Order.desc("firstname")). D'uh
+    if (pageable.getSort().getOrderFor("firstname") != null) {
+      sb.append("order by first_name ")
+          .append(pageable.getSort().getOrderFor("firstname").getDirection().name());
+    }
+
+    sb.append(" limit ? offset ?");
+
+    return jdbcTemplate.query(
+        sb.toString(), getRowMapper(), lastName, pageable.getPageSize(), pageable.getOffset());
   }
 
   @Override

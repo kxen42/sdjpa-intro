@@ -1,5 +1,9 @@
 package guru.springframework.sdjpaintro.jdbctemplate.dao;
 
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
+
 import guru.springframework.sdjpaintro.jdbctemplate.domain.AuthorJdbcTemplate;
 
 public interface AuthorJdbcTemplateDao {
@@ -14,4 +18,6 @@ public interface AuthorJdbcTemplateDao {
   AuthorJdbcTemplate updateAuthor(AuthorJdbcTemplate author);
 
   void deleteAuthorById(Long id);
+
+  List<AuthorJdbcTemplate> findAllAuthorsByLastName(String lastName, Pageable pageable);
 }

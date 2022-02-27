@@ -1,13 +1,20 @@
 package guru.springframework.sdjpaintro.jdbctemplate.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,6 +64,71 @@ class AuthorJdbcTemplateDaoTest {
       System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx");
       System.out.println("PrePrimed.findAuthorBookById " + found);
       System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxx");
+    }
+
+    @Test
+    void findAllAuthorsByLastName() {
+      List<AuthorJdbcTemplate> authors =
+          authorDao.findAllAuthorsByLastName("Smith", PageRequest.of(0, 10));
+
+      assertThat(authors).isNotNull().size().isEqualTo(10);
+    }
+
+    @Test
+    void findAllAuthorsByLastNameDescendingOrderPage1() {
+      List<AuthorJdbcTemplate> authors =
+          authorDao.findAllAuthorsByLastName(
+              "Smith", PageRequest.of(0, 10, Sort.by(Order.desc("firstname"))));
+
+      assertThat(authors).isNotNull().size().isEqualTo(10);
+      assertThat(authors.get(0).getFirstName()).isEqualTo("Yugal");
+    }
+
+    @Test
+    void findAllAuthorsByLastNameDescendingOrder2() {
+      // fetch page 1
+      int pageIndex = 0;
+      authorDao.findAllAuthorsByLastName(
+          "Smith", PageRequest.of(pageIndex++, 10, Sort.by(Order.desc("firstname"))));
+      // fetch page 2
+      List<AuthorJdbcTemplate> authors =
+          authorDao.findAllAuthorsByLastName(
+              "Smith", PageRequest.of(pageIndex, 10, Sort.by(Order.desc("firstname"))));
+
+      assertThat(authors).isNotNull().size().isEqualTo(10);
+      assertThat(authors.get(0).getFirstName()).isEqualTo("Surendra");
+
+      // My attempt to test result sorting
+      List<AuthorJdbcTemplate> expected =
+          authors.stream()
+              .sorted((o1, o2) -> o2.getFirstName().compareTo(o1.getFirstName()))
+              .collect(Collectors.toList());
+      assertIterableEquals(authors, expected);
+    }
+
+    @Test
+    void findAllAuthorsByLastNameAscendingOrder() {
+      List<AuthorJdbcTemplate> authors =
+          authorDao.findAllAuthorsByLastName(
+              "Smith", PageRequest.of(0, 10, Sort.by(Order.asc("firstname"))));
+
+      assertThat(authors).isNotNull().size().isEqualTo(10);
+      assertThat(authors.get(0).getFirstName()).isEqualTo("Ahmed");
+
+      // My attempt to test result sorting
+      List<AuthorJdbcTemplate> expected =
+          authors.stream()
+              .sorted((o1, o2) -> o1.getFirstName().compareTo(o2.getFirstName()))
+              .collect(Collectors.toList());
+      assertIterableEquals(authors, expected);
+    }
+
+    @Test
+    void findAllAuthorsByLastNameGetEmAllKirby() {
+      List<AuthorJdbcTemplate> authors =
+          authorDao.findAllAuthorsByLastName("Smith", PageRequest.of(0, 100));
+
+      assertThat(authors).isNotNull().size().isEqualTo(40);
     }
   }
 
