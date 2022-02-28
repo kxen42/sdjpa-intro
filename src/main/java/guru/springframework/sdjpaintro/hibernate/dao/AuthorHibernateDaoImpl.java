@@ -48,7 +48,7 @@ public class AuthorHibernateDaoImpl implements AuthorHibernateDao {
     EntityManager em = getEntityManager();
     try {
       // want threadsafe
-      StringBuffer sql = new StringBuffer("FROM AuthorHibernate WHERE last_name=:lastname");
+      StringBuffer sql = new StringBuffer("FROM AuthorHibernate WHERE lastName=:lastname");
       if (!Objects.isNull(pageable)
           && !Objects.isNull(pageable.getSort().getOrderFor("firstname"))) {
         sql.append(" ORDER BY first_name ")
