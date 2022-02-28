@@ -14,6 +14,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,8 +22,13 @@ import org.springframework.test.context.ActiveProfiles;
 
 import guru.springframework.sdjpaintro.hibernate.domain.BookHibernate;
 
+/**
+ * Even though the AuthorHibernateDaoImpl is not a Component, leave the ComponentScan in so the
+ * ApplicationContext isn't reloaded when other tests in this package use Springy things
+ */
 @ActiveProfiles("local")
 @DataJpaTest
+@ComponentScan(basePackages = {"guru.springframework.sdjpaintro.hibernate.dao"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BookHibernateDaoImplTest {
 
