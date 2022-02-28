@@ -47,52 +47,40 @@ class AuthorHibernateDaoImplTest {
 
       // unlike JDBC this does not throw an exception
       EntityManager em = emf.createEntityManager();
-      AuthorHibernate deleted = em.find(AuthorHibernate.class, id);
-      em.close();
-
-      assertThat(deleted).isNull();
+      try {
+        AuthorHibernate deleted = em.find(AuthorHibernate.class, id);
+        assertThat(deleted).isNull();
+      } finally {
+        em.close();
+      }
     }
 
     @Test
     void testUpdateAuthor() {
-      AuthorHibernate author = new AuthorHibernate();
-      author.setFirstName("Gore");
-      author.setLastName("V");
-      AuthorHibernate saved = authorDao.saveNewAuthor(author);
-      System.out.println("MutationOperations.testUpdateAuthor test preparation saved: " + saved);
+      AuthorHibernate author;
       EntityManager em = emf.createEntityManager();
-      AuthorHibernate checkSaved = em.find(AuthorHibernate.class, saved.getId());
-      System.out.println("MutationOperations.testUpdateAuthor checkSaved:" + checkSaved);
-      assertThat(checkSaved).isNotNull();
-      em.close();
+      try {
+        author = em.find(AuthorHibernate.class, 1L);
+        System.out.println("MutationOperations.testUpdateAuthor checkSaved:" + author);
+      } finally {
+        em.close();
+      }
 
-      saved.setLastName("Vidal");
+      author.setFirstName("Gore");
+      author.setLastName("Vidal");
       System.out.println(
-          "MutationOperations.testUpdateAuthor change name pending update: " + saved);
+          "MutationOperations.testUpdateAuthor change name pending update: " + author);
 
       // I added @NaturalId to the lastName
       System.out.println(
           "MutationOperations.testUpdateAuthor expected: \n"
               + "javax.persistence.PersistenceException: org.hibernate.HibernateException: An immutable natural identifier of entity guru.springframework.sdjpaintro.hibernate.domain.AuthorHibernate was altered from `V` to `Vidal`\n");
+
       assertThrows(
           PersistenceException.class,
           () -> {
-            authorDao.updateAuthor(saved);
+            authorDao.updateAuthor(author);
           });
-
-      saved.setLastName("V");
-      saved.setSomeMutableField("BOO");
-      AuthorHibernate updated = authorDao.updateAuthor(saved);
-      System.out.println(
-          "MutationOperations.testUpdateAuthor change name pending update: " + saved);
-      System.out.println("MutationOperations.testUpdateAuthor after update: " + updated);
-
-      assertThat(updated.getSomeMutableField()).isEqualTo("BOO");
-      em = emf.createEntityManager();
-      AuthorHibernate checkUpdated = em.find(AuthorHibernate.class, saved.getId());
-      System.out.println("MutationOperations.testUpdateAuthor checkUpdated:" + checkUpdated);
-      assertThat(checkSaved).isNotNull();
-      em.close();
     }
 
     @Test
@@ -107,11 +95,17 @@ class AuthorHibernateDaoImplTest {
       assertThat(saved.getId()).isNotNull();
       System.out.println("MutationOperations.testSaveAuthor saved:" + saved);
 
+      // Fails if you don't run query in its own Hibernate Tx
       EntityManager em = emf.createEntityManager();
-      AuthorHibernate checkSaved = em.find(AuthorHibernate.class, saved.getId());
-      System.out.println("MutationOperations.testSaveAuthor checkSaved:" + checkSaved);
-      assertThat(checkSaved).isNotNull();
-      em.close();
+      try {
+        em.getTransaction().begin();
+        AuthorHibernate checkSaved = em.find(AuthorHibernate.class, saved.getId());
+        em.getTransaction().commit();
+        System.out.println("MutationOperations.testSaveAuthor checkSaved:" + checkSaved);
+        assertThat(checkSaved).isNull();
+      } finally {
+        em.close();
+      }
     }
 
     @Test
@@ -126,10 +120,13 @@ class AuthorHibernateDaoImplTest {
       System.out.println("MutationOperations.testAlternateSaveAuthor saved:" + saved);
 
       EntityManager em = emf.createEntityManager();
-      AuthorHibernate checkSaved = em.find(AuthorHibernate.class, saved.getId());
-      System.out.println("MutationOperations.testSaveAuthor checkSaved:" + checkSaved);
-      assertThat(checkSaved).isNotNull();
-      em.close();
+      try {
+        AuthorHibernate checkSaved = em.find(AuthorHibernate.class, saved.getId());
+        System.out.println("MutationOperations.testSaveAuthor checkSaved:" + checkSaved);
+        assertThat(checkSaved).isNotNull();
+      } finally {
+        em.close();
+      }
     }
   }
 
