@@ -2,12 +2,12 @@ package guru.springframework.sdjpaintro.hibernate.dao;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.*;
 import javax.persistence.criteria.*;
 
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Pageable;
 
 import guru.springframework.sdjpaintro.hibernate.domain.AuthorHibernate;
 
@@ -43,10 +43,37 @@ public class AuthorHibernateDaoImpl implements AuthorHibernateDao {
     return query.getSingleResult();
   }
 
+  @Override
+  public List<AuthorHibernate> findAllAuthorsByLastName(String lastName, Pageable pageable) {
+    EntityManager em = getEntityManager();
+    try {
+      // want threadsafe
+      StringBuffer sql = new StringBuffer("FROM AuthorHibernate WHERE last_name=:lastname");
+      if (!Objects.isNull(pageable)
+          && !Objects.isNull(pageable.getSort().getOrderFor("firstname"))) {
+        sql.append(" ORDER BY first_name ")
+            .append(pageable.getSort().getOrderFor("firstname").getDirection().name());
+      }
+
+      TypedQuery<AuthorHibernate> query =
+          em.createQuery(sql.toString(), AuthorHibernate.class).setParameter("lastname", lastName);
+
+      if (!Objects.isNull(pageable)) {
+        query
+            .setFirstResult(Math.toIntExact(pageable.getOffset()))
+            .setMaxResults(pageable.getPageSize());
+      }
+
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
   // Caution: When Hibernate is being lazy
   // Hibernate might not persist an object right away, later he'll cover working with Tx
   @Override
-  @Transactional(propagation = Propagation.REQUIRES_NEW) /* Without this the test fails */
+  //  @Transactional(propagation = Propagation.REQUIRES_NEW) /* Without this the test fails */
   public AuthorHibernate saveNewAuthor(AuthorHibernate author) {
     // joinTransaction will be in sync with Spring Tx unless it's joining a Hibernate Tx that you
     // created

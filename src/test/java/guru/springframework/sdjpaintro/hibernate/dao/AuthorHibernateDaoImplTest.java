@@ -13,6 +13,8 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
 import guru.springframework.sdjpaintro.hibernate.domain.AuthorHibernate;
@@ -183,6 +185,63 @@ class AuthorHibernateDaoImplTest {
     void findAuthorByNameNative() {
       AuthorHibernate found = authorDao.findAuthorByNameNative("Craig", "Walls");
       assertThat(found).isNotNull();
+    }
+
+    @Test
+    void findAllAuthorsByLastNamePaging() {
+      // natural order from DB
+      List<AuthorHibernate> authors = authorDao.findAllAuthorsByLastName("Smith", null);
+      assertThat(authors).isNotNull().hasSize(40);
+
+      System.out.println("ReadOperations.findAllAuthorsByLastName first Author: " + authors.get(0));
+      assertThat(authors.get(0).getFirstName()).isEqualTo("Robert");
+    }
+
+    @Test
+    void findAllAuthorsByLastNameWithoutSort() {
+      // natural order from DB
+      List<AuthorHibernate> authors =
+          authorDao.findAllAuthorsByLastName("Smith", PageRequest.of(0, 10));
+      assertThat(authors).isNotNull().hasSize(10);
+
+      System.out.println("ReadOperations.findAllAuthorsByLastName first Author: " + authors.get(0));
+      assertThat(authors.get(0).getFirstName()).isEqualTo("Robert");
+    }
+
+    @Test
+    void findAllAuthorsByLastNameDescending() {
+      List<AuthorHibernate> authors =
+          authorDao.findAllAuthorsByLastName(
+              "Smith", PageRequest.of(0, 10, Sort.by(Sort.Order.desc("firstname"))));
+      assertThat(authors).isNotNull().hasSize(10);
+
+      System.out.println("ReadOperations.findAllAuthorsByLastName first Author: " + authors.get(0));
+      assertThat(authors.get(0).getFirstName()).isEqualTo("Yugal");
+    }
+
+    @Test
+    void findAllAuthorsByLastNameAscending() {
+      List<AuthorHibernate> authors =
+          authorDao.findAllAuthorsByLastName(
+              "Smith", PageRequest.of(0, 10, Sort.by(Sort.Order.asc("firstname"))));
+      assertThat(authors).isNotNull().hasSize(10);
+
+      System.out.println("ReadOperations.findAllAuthorsByLastName first Author: " + authors.get(0));
+      assertThat(authors.get(0).getFirstName()).isEqualTo("Ahmed");
+    }
+
+    @Test
+    void findAllAuthorsByLastNameTwoPages() {
+      authorDao.findAllAuthorsByLastName(
+          "Smith", PageRequest.of(0, 10, Sort.by(Sort.Order.asc("firstname"))));
+
+      List<AuthorHibernate> authors =
+          authorDao.findAllAuthorsByLastName(
+              "Smith", PageRequest.of(1, 10, Sort.by(Sort.Order.asc("firstname"))));
+      assertThat(authors).isNotNull().hasSize(10);
+
+      System.out.println("ReadOperations.findAllAuthorsByLastName first Author: " + authors.get(0));
+      assertThat(authors.get(0).getFirstName()).isEqualTo("Dinesh");
     }
   }
 }

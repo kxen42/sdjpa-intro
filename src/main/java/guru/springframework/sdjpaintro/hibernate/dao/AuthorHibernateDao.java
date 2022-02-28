@@ -2,6 +2,8 @@ package guru.springframework.sdjpaintro.hibernate.dao;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+
 import guru.springframework.sdjpaintro.hibernate.domain.AuthorHibernate;
 
 public interface AuthorHibernateDao {
@@ -9,6 +11,8 @@ public interface AuthorHibernateDao {
   AuthorHibernate getById(Long id);
 
   AuthorHibernate findAuthorByName(String firstName, String lastName);
+
+  List<AuthorHibernate> findAllAuthorsByLastName(String lastName, Pageable pageable);
 
   List<AuthorHibernate> findByLastName(String lastName);
 
