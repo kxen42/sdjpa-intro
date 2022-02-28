@@ -10,13 +10,10 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,14 +23,18 @@ import guru.springframework.sdjpaintro.hibernate.domain.BookHibernate;
 
 @ActiveProfiles("local")
 @DataJpaTest
-@ComponentScan(basePackages = {"guru.springframework.sdjpaintro.hibernate.dao"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BookHibernateDaoImplTest {
 
-  @Autowired BookHibernateDao bookDao;
+  BookHibernateDao bookDao;
   // I experience with real testing is that you don't use code that you're testing to get the
   // results of other tests
   @Autowired EntityManagerFactory emf;
+
+  @BeforeEach
+  void setup() {
+    bookDao = new BookHibernateDaoImpl(emf);
+  }
 
   @Nested
   @DisplayName("Fetching data - primed DB")
@@ -81,22 +82,22 @@ class BookHibernateDaoImplTest {
     void findAllBooksSortByTitleAscending() {
       List<BookHibernate> books =
           bookDao.findAllBooksSortByTitle(PageRequest.of(0, 10, Sort.by(Sort.Order.asc("title"))));
-      assertThat(books).isNotNull().hasSize(5);
-      assertThat(books.get(0).getTitle()).isEqualTo("Clean Code");
+      assertThat(books).isNotNull().size().isGreaterThanOrEqualTo(5);
+      assertThat(books.get(0).getTitle()).isEqualTo("Ada");
     }
 
     @Test
     void findAllBooksSortByTitleDescending() {
       List<BookHibernate> books =
-          bookDao.findAllBooksSortByTitle(PageRequest.of(0, 10, Sort.by(Sort.Order.desc("title"))));
+          bookDao.findAllBooksSortByTitle(PageRequest.of(0, 5, Sort.by(Sort.Order.desc("title"))));
       assertThat(books).isNotNull().hasSize(5);
       assertThat(books.get(0).getTitle()).isEqualTo("Spring in Action, 6th Edition");
     }
 
     @Test
     void findAllBooksPageable() {
-      List<BookHibernate> books = bookDao.findAllBooks(PageRequest.of(0, 10));
-      assertThat(books).isNotNull().hasSize(5);
+      List<BookHibernate> books = bookDao.findAllBooks(PageRequest.of(2, 5));
+      assertThat(books).isNotNull().size().isLessThanOrEqualTo(5);
     }
 
     @Test

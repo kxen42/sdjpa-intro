@@ -10,14 +10,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
 
 import guru.springframework.sdjpaintro.hibernate.domain.BookHibernate;
 
 /*
 Purposely using EntityManager and try-finally to close to do this old school
  */
-@Component
 public class BookHibernateDaoImpl implements BookHibernateDao {
 
   private final EntityManagerFactory emf;
@@ -121,7 +119,7 @@ public class BookHibernateDaoImpl implements BookHibernateDao {
   */
   @Override
   public List<BookHibernate> findAllBooks(Pageable pageable) {
-    return this.findAllBooks(Math.toIntExact(pageable.getOffset()), pageable.getPageSize());
+    return this.findAllBooks(pageable.getPageSize(), Math.toIntExact(pageable.getOffset()));
   }
 
   @Override

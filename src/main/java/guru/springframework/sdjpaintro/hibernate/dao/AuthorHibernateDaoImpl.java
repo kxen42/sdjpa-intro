@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.*;
 import javax.persistence.criteria.*;
 
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +15,6 @@ import guru.springframework.sdjpaintro.hibernate.domain.AuthorHibernate;
  * Using Hibernate DAO pattern rather than Repository pattern. The AuthorHibernate is a
  * Spring @Entity (javax.persistence.Entity) implemented by Hibernate
  */
-@Component
 public class AuthorHibernateDaoImpl implements AuthorHibernateDao {
 
   private final EntityManagerFactory emf;

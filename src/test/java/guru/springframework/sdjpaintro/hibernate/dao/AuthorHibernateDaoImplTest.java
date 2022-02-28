@@ -9,25 +9,26 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceException;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 
 import guru.springframework.sdjpaintro.hibernate.domain.AuthorHibernate;
 
 @ActiveProfiles("local")
 @DataJpaTest
-@ComponentScan(basePackages = {"guru.springframework.sdjpaintro.hibernate.dao"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class AuthorHibernateDaoImplTest {
 
-  @Autowired AuthorHibernateDao authorDao;
+  AuthorHibernateDao authorDao;
   @Autowired EntityManagerFactory emf;
+
+  @BeforeEach
+  void setup() {
+    authorDao = new AuthorHibernateDaoImpl(emf);
+  }
 
   @Nested
   @DisplayName("Insert/Update/Delete")
