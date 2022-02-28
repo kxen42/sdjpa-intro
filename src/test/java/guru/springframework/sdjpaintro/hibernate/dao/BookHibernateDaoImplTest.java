@@ -1,9 +1,11 @@
 package guru.springframework.sdjpaintro.hibernate.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -15,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
 import guru.springframework.sdjpaintro.hibernate.domain.BookHibernate;
@@ -70,6 +75,49 @@ class BookHibernateDaoImplTest {
     void findBookByTitleNative() {
       BookHibernate book = bookDao.findBookByTitleNative("Clean Code");
       assertThat(book).isNotNull();
+    }
+
+    @Test
+    void findAllBooksSortByTitleAscending() {
+      List<BookHibernate> books =
+          bookDao.findAllBooksSortByTitle(PageRequest.of(0, 10, Sort.by(Sort.Order.asc("title"))));
+      assertThat(books).isNotNull().hasSize(5);
+      assertThat(books.get(0).getTitle()).isEqualTo("Clean Code");
+    }
+
+    @Test
+    void findAllBooksSortByTitleDescending() {
+      List<BookHibernate> books =
+          bookDao.findAllBooksSortByTitle(PageRequest.of(0, 10, Sort.by(Sort.Order.desc("title"))));
+      assertThat(books).isNotNull().hasSize(5);
+      assertThat(books.get(0).getTitle()).isEqualTo("Spring in Action, 6th Edition");
+    }
+
+    @Test
+    void findAllBooksPageable() {
+      List<BookHibernate> books = bookDao.findAllBooks(PageRequest.of(0, 10));
+      assertThat(books).isNotNull().hasSize(5);
+    }
+
+    @Test
+    void findAllBooksPageableLongToIntConversion() {
+      assertThrows(
+          ArithmeticException.class,
+          () -> {
+            bookDao.findAllBooks(new TestingPageable());
+          });
+    }
+
+    @Test
+    void findAllBooksWithSizeAndOffset() {
+      List<BookHibernate> books = bookDao.findAllBooks(5, 0);
+      assertThat(books).isNotNull().hasSize(5);
+    }
+
+    @Test
+    void findAllBooksNoArgs() {
+      List<BookHibernate> books = bookDao.findAllBooks();
+      assertThat(books).isNotNull().isNotEmpty();
     }
   }
 
@@ -148,6 +196,75 @@ class BookHibernateDaoImplTest {
       em.close();
       assertThat(updated.getPrice()).isEqualTo("19.99");
       System.out.println("DataManipulation.updateBook checkUpdate: " + checkUpdate);
+    }
+  }
+
+  class TestingPageable implements Pageable {
+
+    @Override
+    public boolean isPaged() {
+      return Pageable.super.isPaged();
+    }
+
+    @Override
+    public boolean isUnpaged() {
+      return Pageable.super.isUnpaged();
+    }
+
+    @Override
+    public int getPageNumber() {
+      return 0;
+    }
+
+    @Override
+    public int getPageSize() {
+      return 5;
+    }
+
+    // Expect this to throw Exception
+    @Override
+    public long getOffset() {
+      return Long.MAX_VALUE;
+    }
+
+    @Override
+    public Sort getSort() {
+      return null;
+    }
+
+    @Override
+    public Sort getSortOr(Sort sort) {
+      return Pageable.super.getSortOr(sort);
+    }
+
+    @Override
+    public Pageable next() {
+      return null;
+    }
+
+    @Override
+    public Pageable previousOrFirst() {
+      return null;
+    }
+
+    @Override
+    public Pageable first() {
+      return null;
+    }
+
+    @Override
+    public Pageable withPage(int pageNumber) {
+      return null;
+    }
+
+    @Override
+    public boolean hasPrevious() {
+      return false;
+    }
+
+    @Override
+    public Optional<Pageable> toOptional() {
+      return Pageable.super.toOptional();
     }
   }
 }

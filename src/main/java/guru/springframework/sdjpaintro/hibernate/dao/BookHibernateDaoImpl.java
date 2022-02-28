@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import guru.springframework.sdjpaintro.hibernate.domain.BookHibernate;
@@ -60,6 +61,100 @@ public class BookHibernateDaoImpl implements BookHibernateDao {
     }
   }
 
+  @Override
+  public BookHibernate findBookByTitleCriteria(String title) {
+    EntityManager em = getEntityManager();
+
+    try {
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<BookHibernate> cr = cb.createQuery(BookHibernate.class);
+      Root<BookHibernate> root = cr.from(BookHibernate.class);
+
+      cr.select(root).where(cb.equal(root.get("title"), title));
+      return em.createQuery(cr).getSingleResult();
+    } finally {
+      em.close();
+    }
+  }
+
+  @Override
+  public BookHibernate findBookByTitleNative(String title) {
+    EntityManager em = getEntityManager();
+
+    try {
+
+      return (BookHibernate)
+          em.createNativeQuery(
+                  "SELECT * FROM book_hibernate WHERE title=:title", BookHibernate.class)
+              .setParameter("title", title)
+              .getSingleResult();
+    } finally {
+      em.close();
+    }
+  }
+
+  @Override
+  public List<BookHibernate> findAllBooksSortByTitle(Pageable pageable) {
+    EntityManager em = getEntityManager();
+    try {
+      String sql =
+          "SELECT b FROM BookHibernate b order by title "
+              + pageable.getSort().getOrderFor("title").getDirection().name();
+
+      TypedQuery<BookHibernate> query =
+          em.createQuery(sql, BookHibernate.class)
+              .setFirstResult(pageable.getPageNumber())
+              .setMaxResults(pageable.getPageSize());
+
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  /*
+  Math.toIntExact he uses this as the safest way to shorten a long to an int.
+  It throws an ArithmeticException if the value overflows an int.
+  If you just assign a long to an int, your results will be unpredictable if it overflows the int.
+
+  Without implementing my own Pageable impl I can't test this use. It could be done in Groovy.
+  */
+  @Override
+  public List<BookHibernate> findAllBooks(Pageable pageable) {
+    return this.findAllBooks(Math.toIntExact(pageable.getOffset()), pageable.getPageSize());
+  }
+
+  @Override
+  public List<BookHibernate> findAllBooks(int pageSize, int offset) {
+    EntityManager em = getEntityManager();
+    try {
+      TypedQuery<BookHibernate> query =
+          em.createQuery("SELECT b FROM BookHibernate b", BookHibernate.class)
+              .setFirstResult(offset)
+              .setMaxResults(pageSize);
+
+      return query.getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
+  @Override
+  public List<BookHibernate> findAllBooks() {
+    // I'm too lazy to change tha name
+    return this.findAll();
+  }
+
+  @Override
+  public List<BookHibernate> findAll() {
+    EntityManager em = getEntityManager();
+    try {
+      return em.createNamedQuery("book_find_all", BookHibernate.class).getResultList();
+    } finally {
+      em.close();
+    }
+  }
+
   /** This one manages the transaction. */
   @Override
   public BookHibernate saveNewBook(BookHibernate book) {
@@ -87,16 +182,6 @@ public class BookHibernateDaoImpl implements BookHibernateDao {
       em.flush();
       em.getTransaction().commit();
       return updated;
-    } finally {
-      em.close();
-    }
-  }
-
-  @Override
-  public List<BookHibernate> findAll() {
-    EntityManager em = getEntityManager();
-    try {
-      return em.createNamedQuery("book_find_all", BookHibernate.class).getResultList();
     } finally {
       em.close();
     }
@@ -135,38 +220,6 @@ public class BookHibernateDaoImpl implements BookHibernateDao {
       em.close();
     }
     return null;
-  }
-
-  @Override
-  public BookHibernate findBookByTitleCriteria(String title) {
-    EntityManager em = getEntityManager();
-
-    try {
-      CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<BookHibernate> cr = cb.createQuery(BookHibernate.class);
-      Root<BookHibernate> root = cr.from(BookHibernate.class);
-
-      cr.select(root).where(cb.equal(root.get("title"), title));
-      return em.createQuery(cr).getSingleResult();
-    } finally {
-      em.close();
-    }
-  }
-
-  @Override
-  public BookHibernate findBookByTitleNative(String title) {
-    EntityManager em = getEntityManager();
-
-    try {
-
-      return (BookHibernate)
-          em.createNativeQuery(
-                  "SELECT * FROM book_hibernate WHERE title=:title", BookHibernate.class)
-              .setParameter("title", title)
-              .getSingleResult();
-    } finally {
-      em.close();
-    }
   }
 
   private EntityManager getEntityManager() {
